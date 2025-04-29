@@ -12,3 +12,80 @@
 // 7 , 6 -> 7
 // 6 , 4 , 7 -> 6 
 // 4 , 7 
+
+public class q1 {
+    public static void main(String[] args) {
+        Fila fila = new Fila(0); 
+
+        System.out.println("Inicialmente vazia:");
+        fila.printFila();
+
+        fila.enqueue(5);
+        System.out.println("Após enqueue(5):");
+        fila.printFila();
+
+        fila.enqueue(3);
+        System.out.println("Após enqueue(3):");
+        fila.printFila();
+
+        fila.dequeue();
+        System.out.println("Após dequeue():");
+        fila.printFila();
+
+        fila.enqueue(2);
+        System.out.println("Após enqueue(2):");
+        fila.printFila();
+
+        fila.enqueue(8);
+        System.out.println("Após enqueue(8):");
+        fila.printFila();
+
+        fila.dequeue();
+        System.out.println("Após dequeue():");
+        fila.printFila();
+
+        fila.dequeue();
+        System.out.println("Após dequeue():");
+        fila.printFila();
+
+        fila.enqueue(9);
+        System.out.println("Após enqueue(9):");
+        fila.printFila();
+
+        fila.enqueue(1);
+        System.out.println("Após enqueue(1):");
+        fila.printFila();
+
+        fila.dequeue();
+        System.out.println("Após dequeue():");
+        fila.printFila();
+
+        fila.enqueue(7);
+        System.out.println("Após enqueue(7):");
+        fila.printFila();
+
+        fila.enqueue(6);
+        System.out.println("Após enqueue(6):");
+        fila.printFila();
+
+        fila.dequeue();
+        System.out.println("Após dequeue():");
+        fila.printFila();
+
+        fila.dequeue();
+        System.out.println("Após dequeue():");
+        fila.printFila();
+
+        fila.enqueue(4);
+        System.out.println("Após enqueue(4):");
+        fila.printFila();
+
+        fila.enqueue(7);
+        System.out.println("Após enqueue(7):");
+        fila.printFila();
+
+        fila.dequeue();
+        System.out.println("Após dequeue():");
+        fila.printFila();
+    }
+}

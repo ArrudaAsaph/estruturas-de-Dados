@@ -1,18 +1,22 @@
 public interface filaInterface {
 
-    public int tamanho();
+    public int size();
 
     public boolean isEmpty();
 
-    public Object inicio()
-
-    throws EFilaVazia;
+    public Object first() throws EFilaVazia;
 
     public void enqueue(Object o);
 
-    public Object desenfileirar()
-    
-    throws EFilaVazia;
+    public Object dequeue() throws EFilaVazia;
 
     }
     
+// public interface IFila {
+// 	    public abstract void enqueue(Object o);
+// 	    public abstract Object dequeue();
+// 	    public Object first();
+// 	    public abstract int size();
+// 	    public abstract boolean isEmpty();
+// }
+
