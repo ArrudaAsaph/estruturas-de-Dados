@@ -1,3 +1,6 @@
+package ListaExercicios.lista1;
+
+
 public interface filaInterface {
 
     public int size();

@@ -1,3 +1,4 @@
+package ListaExercicios.lista1;
 
 
 public class EFilaVazia extends RuntimeException{
