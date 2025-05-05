@@ -69,6 +69,22 @@ public class Fila implements filaInterface {
         return primeiro;
     }
 
+
+    public void reverse() {
+
+        Object fila_invertida[] = new Object[tamanho];
+
+        int novo_inicio = inicio;
+
+        for (int nova_posicao = size() - 1 ; novo_inicio + 1 != fim + 1; nova_posicao--) {
+            fila_invertida[nova_posicao] = fila[novo_inicio];
+            novo_inicio = (novo_inicio + 1 ) % tamanho;
+        }
+        fim = size();
+
+        fila = fila_invertida;
+        inicio = 0;
+    }
     public void printFila() {
         System.out.println("Fila (tamanho total: " + tamanho + ")");
         for (int i = 0; i < fila.length; i++) {
