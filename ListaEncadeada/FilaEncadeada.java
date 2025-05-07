@@ -18,7 +18,24 @@ public class FilaEncadeada {
 
         if (inicio == null) {
             inicio = novNo;
-            fim = novNo.getProximo();
+            fim = novNo;
+        } else {
+            fim.setProximo(novNo);
+            fim = novNo;
         }
+        tamanho++;
+    }
+    public boolean isEmpty() {
+        return inicio == null;
+    }
+
+    
+    public Object dequeue() throws ElemenVazia {
+        if (isEmpty()) {
+            throw new ElemenVazia("Fila Vazia");
+        }
+       Object elememtoOut = inicio.getElemento();
+       inicio = inicio.getProximo();
+        return elememtoOut;
     }
 }
