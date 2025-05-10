@@ -89,5 +89,48 @@ public class ListaEncadeadaDoble {
 
     }
 
+    public void insertFirst(Object novo_elemento) {
+        DobleNo novo_no = new DobleNo(novo_elemento);
+        if (inicio == null) {
+            inicio = fim = novo_no;
+        } else {
+            novo_no.setProximo(inicio);
+            inicio.setAnterior(novo_no);
+            inicio = novo_no;
+        }
+    }
 
+    public void insertLast(Object novo_elemento) {
+        DobleNo novo_no = new DobleNo(novo_elemento);
+
+        if (fim == null) {
+            inicio = fim = novo_no;
+        } else {
+            fim.setProximo(novo_no);
+            novo_no.setAnterior(fim);
+            fim = novo_no;
+        }
+    }
+
+    public Object remove(DobleNo elemento) {
+        Object removido = elemento.getElemento();
+    
+        if (elemento == inicio && elemento == fim) {
+            
+            inicio = fim = null;
+        } else if (elemento == inicio) {
+            
+            inicio = elemento.getProximo();
+            inicio.setAnterior(null);
+        } else if (elemento == fim) {
+            fim = elemento.getAnterior();
+            fim.setProximo(null);
+        } else {
+            elemento.getAnterior().setProximo(elemento.getProximo());
+            elemento.getProximo().setAnterior(elemento.getAnterior());
+        }
+    
+        return removido;
+    }
+    
 }
