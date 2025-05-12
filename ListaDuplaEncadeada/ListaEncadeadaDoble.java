@@ -52,10 +52,10 @@ public class ListaEncadeadaDoble {
     }
 
     public void swapElements(DobleNo no1, DobleNo no2) {
-        DobleNo temp = no1;
+        Object temp = no1.getElemento();
 
         no1.setElemento(no2.getElemento());
-        no2.setElemento(temp.getElemento());
+        no2.setElemento(temp);
     }
 
     public void insertBefore(DobleNo no, Object novo_elemento) {
@@ -70,6 +70,7 @@ public class ListaEncadeadaDoble {
         } else {
             novo_no.getAnterior().setProximo(novo_no);
         }    
+        tamanho++;
     }
 
     public void insertAfter(DobleNo no, Object novo_elemento) {
@@ -85,7 +86,7 @@ public class ListaEncadeadaDoble {
         } else {
             novo_no.getProximo().setAnterior(novo_no);
         }
-
+        tamanho++;
 
     }
 
@@ -98,6 +99,7 @@ public class ListaEncadeadaDoble {
             inicio.setAnterior(novo_no);
             inicio = novo_no;
         }
+        tamanho++;
     }
 
     public void insertLast(Object novo_elemento) {
@@ -110,6 +112,8 @@ public class ListaEncadeadaDoble {
             novo_no.setAnterior(fim);
             fim = novo_no;
         }
+
+        tamanho++;
     }
 
     public Object remove(DobleNo elemento) {
@@ -129,8 +133,31 @@ public class ListaEncadeadaDoble {
             elemento.getAnterior().setProximo(elemento.getProximo());
             elemento.getProximo().setAnterior(elemento.getAnterior());
         }
-    
+        tamanho--;
         return removido;
     }
+
+
+    public void print() {
+
+        if (inicio == null ) {
+            System.out.println("Lista vazia");
+        } else {
+            DobleNo temp = inicio;
+            while (temp != null) {
+                    System.out.print(String.format("%s -> ", temp.getElemento()));
+                    temp = temp.getProximo();
+                }
+                System.out.print("null");
+        }
+    }
     
+
+    public DobleNo getInicio() {
+        return this.inicio;
+    }
+
+    public DobleNo getFim() {
+        return this.fim;
+    }
 }
