@@ -36,4 +36,28 @@ public class Vetor implements VetorInterfece {
             return vetor[indice];
         }
     } 
+
+    public Object replaceAtRank(int indice, Object novo_elemento) throws ElemVazia{
+        if (indice >= tamanho) {
+            throw new ElemVazia("Indice inválido");
+        } else {
+            Object elemento_out = vetor[indice];
+            vetor[indice] = novo_elemento;
+            return elemento_out;
+        }
+    }
+    
+    public void insertAtRank(int indice, Object novo_elemento) throws ElemVazia{
+        if (indice >= tamanho) {
+            throw new ElemVazia("Indice inválido");
+        } else {
+            if (tamanho == ultimo_Elemento) {
+                tamanho += fator_Crescimento;
+                if (fator_Crescimento == 0) {   
+                    tamanho = tamanho * 2;
+
+                }
+            }
+        }
+    }
 }
