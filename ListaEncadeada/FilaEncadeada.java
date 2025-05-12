@@ -1,7 +1,7 @@
 public class FilaEncadeada {
  
     
-    private Object elemento;
+
     private int tamanho;
     private No inicio;
     private No fim;
