@@ -41,26 +41,27 @@ public class PilhaRubroNegro {
     }
 
     private void verificarEspaco() {
+       
         if (posicaoVermelho + 1 == posicaoPreto) {
             int novoTamanho = tamanhoArray * fator_de_crescimento;
-            push(novoTamanho);
-        } 
-        else if (sizeArray_Disponivel() >= tamanhoArray * 2 / 3 && tamanhoArray > 1) {
+            redimensionar(novoTamanho);
+        }
+        
+        else if (sizeArray() <= tamanhoArray / 3 && tamanhoArray > 1) {
             int novoTamanho = tamanhoArray / 2;
-            push(novoTamanho);
+            redimensionar(novoTamanho);
         }
     }
 
-    private void push(int novoTamanho) {
-        
+    private void redimensionar(int novoTamanho) {
         Object[] novaPilha = new Object[novoTamanho];
 
-        
+       
         for (int i = 0; i <= posicaoVermelho; i++) {
             novaPilha[i] = pilhaRubroNegro[i];
         }
 
-        
+       
         int tamanhoPreto = tamanhoArray - posicaoPreto;
         int novaPosicaoPreto = novoTamanho - tamanhoPreto;
         for (int i = 0; i < tamanhoPreto; i++) {
@@ -81,12 +82,19 @@ public class PilhaRubroNegro {
     }
 
     public Object popVermelho(){
-        return pilhaRubroNegro[posicaoVermelho--];
+        if (isEmpty_Vermelho()) return null;
+        Object obj = pilhaRubroNegro[posicaoVermelho--];
+        verificarEspaco(); 
+        return obj;
     }
 
     public Object popPreto(){
-        return pilhaRubroNegro[posicaoPreto++];
+        if (isEmpty_Preto()) return null;
+        Object obj = pilhaRubroNegro[posicaoPreto++];
+        verificarEspaco(); 
+        return obj;
     }
+
     public void pushVermelho(Object novo_objeto) {
         verificarEspaco();
         pilhaRubroNegro[++posicaoVermelho] = novo_objeto;
@@ -95,22 +103,6 @@ public class PilhaRubroNegro {
     public void pushPreto(Object novo_objeto) {
         verificarEspaco();
         pilhaRubroNegro[--posicaoPreto] = novo_objeto;
-    }
-
-    public void printarVermelho() {
-        System.out.println("PILHA VERMELHA");
-        for (int i = 0; i <= posicaoVermelho; i++) {
-            System.out.println(String.format("%dº -> %s", i + 1, pilhaRubroNegro[posicaoVermelho - i]));
-        }
-        System.out.println("-----------------------------------");
-    }
-
-    public void printarPreto() {
-        System.out.println("PILHA PRETA");
-        for (int i = posicaoPreto; i < tamanhoArray; i++) {
-            System.out.println(String.format("%dº -> %s", (tamanhoArray - i), pilhaRubroNegro[i]));
-        }
-        System.out.println("-----------------------------------");
     }
 
     public void printar_array() {
@@ -124,33 +116,9 @@ public class PilhaRubroNegro {
             } else if (i >= posicaoPreto) {
                 System.out.print(String.format(" %s P |", pilhaRubroNegro[i]));
             } else {
-                System.out.print(String.format(" %s |", pilhaRubroNegro[i]));
+                System.out.print("     |");
             }
         }
         System.out.println("\n-----------------------------------");
-    }
-
-    public static void main(String[] args) {
-        PilhaRubroNegro pilha = new PilhaRubroNegro(1, 2);
-        pilha.pushVermelho(0);
-        pilha.printar_array();
-        pilha.pushVermelho(9);
-        pilha.printar_array();
-        pilha.pushPreto(2);
-        pilha.pushPreto(3);
-        pilha.printar_array();
-        pilha.pushPreto(4);
-        pilha.printar_array();
-        Object topo = pilha.topVermelho();
-        System.out.println(topo);
-        pilha.pushVermelho(48);
-        topo = pilha.topVermelho();
-        System.out.println(topo);
-        pilha.popPreto();
-        topo = pilha.topPreto();
-        pilha.printar_array();
-        System.out.println(topo);
-        pilha.popVermelho();
-        pilha.printar_array();
     }
 }
