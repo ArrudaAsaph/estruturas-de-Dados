@@ -6,8 +6,11 @@ public class Lista {
     private int tamanho;
 
     public Lista() {
-        this.inicio = null;
-        this.fim = null;
+        inicio = new No(null);
+        fim = new No(null);
+
+        inicio.setProximo(fim);
+        fim.setAnterior(inicio);
         this.tamanho = 0;
     }
 
@@ -29,7 +32,7 @@ public class Lista {
 
     public Object last() throws ElemenVazia {
         if (isEmpty()) {
-            throw new ElemenVazia("Fila Vazia") 
+            throw new ElemenVazia("Fila Vazia"); 
         } else {
             return fim.getElemento();
         }
@@ -110,13 +113,24 @@ public class Lista {
     public void insertFirst(Object novo_obj) {
         No novo_no = new No(novo_obj);
 
-        if (inicio == null) {
-            inicio = fim = novo_no;
-        } else {
-            novo_no.setProximo(inicio);
-            novo_no.setAnterior(novo_no);
-            inicio = novo_no;
-        }
+        novo_no.setAnterior(inicio);
+        novo_no.setProximo(inicio.getProximo());
+
+        inicio.setProximo(novo_no);
+
+        novo_no.getProximo().setAnterior(novo_no);
+    }
+
+    public void insertLast(Object novo_obj) {
+        No novo_no = new No(novo_obj);
+
+        novo_no.setProximo(fim);
+        novo_no.setAnterior(fim.getAnterior());
+
+        fim.setAnterior(novo_no);
+
+        novo_no.getAnterior().setProximo(novo_no);
         tamanho++;
     }
+
 }
