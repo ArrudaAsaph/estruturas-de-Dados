@@ -20,11 +20,15 @@ public class Sequencia {
         fim.setAnterior(inicio);
     }
 
+    public int size() {
+        return tamanho;
+    }
+
     public No first() {
         return inicio.getProximo();
     }
 
-    public No after() {
+    public No lastr() {
         return fim.getAnterior();
     }
 
@@ -108,41 +112,65 @@ public class Sequencia {
     }
 
 
-    public No atRank(int indice) {
-        if (indice < 0 || indice > tamanho) {
-            throw new ElemenVazia("Indice fora");
-        }
-        else {
-            if (indice <= (tamanho / 2)) {
-                No temp = inicio;
-                for (int i = 0; i <= indice; i++) {
+    public No atRank(int rank) throws ElemenVazia {
+        if (rank < 0 || rank >= size()) {
+            throw new ElemenVazia("Rank fora");
+        } else{
+            No temp;
+            if (rank <= size() / 2) {
+                temp = inicio.getProximo();
+                for (int i = 0; i <= rank; i++) {
                     temp = temp.getProximo();
                 }
-                
             } else {
-                No temp = fim;
-                for (int i = tamanho - 1; i > indice;i--) {
+                temp = fim.getAnterior();
+                for (int i = 0; i < size() - rank - 1; i++) {
                     temp = temp.getAnterior();
                 }
             }
+
             return temp;
         }
     }
     
-    public void insertAtRank(int indice, Object elemento) {
-        if (indice < 0 || indice > tamanho) {
-            throw new ElemenVazia("Indice fora");
+    public int rankOf(No no) {
+        No temp = inicio.getProximo();
+        int rank = 0;
+        while (temp != no && temp != fim) {
+            temp = temp.getProximo();
+            rank++;
         }
-        if (indice <= (tamanho / 2)) {
-            No temp = inicio;
-            for (int i = 0; i < indice; i++) {
-                temp = temp.getProximo();
-            }
-            
-        } else {
-            No temp = fim;
-            for (int i = 0; i < (tamanho - indice);)
-
-        }
+        return rank;
     }
+
+    public void insertAtRank(int rank, Object elemento) {
+       No no_base = atRank(rank);
+
+       insertBefore(no_base, elemento);
+       
+
+    }
+
+    public Object elementAtRank(int rank) {
+        No no = atRank(rank);
+
+        return no.getElemento();
+    }
+
+    public Object replaceAtRank(int rank, Object elemento) {
+        No no = atRank(rank);
+        Object out = no.getElemento();
+        no.setElemento(elemento);
+
+        return out;
+    }
+
+
+    public void removeAtRank(int rank) {
+        No no = atRank(rank);
+
+        remove(no);
+    }
+
+
 }
