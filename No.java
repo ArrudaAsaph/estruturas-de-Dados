@@ -8,6 +8,8 @@ public class No {
     
     public No(Object elemento) {
         this.elemento = elemento;
+        this.proximo = null;
+        this.anterior = null;
     }
 
     public Object getElemento() {
@@ -17,7 +19,7 @@ public class No {
     public void setElemento(Object elemento) {
         this.elemento = elemento;
         this.proximo = null;
-        this.fim = null;
+        this.anterior = null;
     }
 
     public No getProximo() {
