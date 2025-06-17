@@ -4,11 +4,11 @@ import java.util.Iterator;
 public class No {
     private Object elemento;
     private No noPai;
-    private ArrayList filhos;
+    private ArrayList<No> filhos;
 
     public No (Object elemento, No paiNo) {
         this.elemento = elemento;
-        this.noPai = noPai;
+        this.noPai = paiNo;
 
         this.filhos = new ArrayList<No>();
     }
@@ -29,11 +29,11 @@ public class No {
         this.noPai = noPai;
     }
 
-    public ArrayList getFilhos() {
+    public ArrayList<No> getFilhos() {
         return filhos;
     }
 
-    public void setFilhos(ArrayList filhos) {
+    public void setFilhos(ArrayList<No> filhos) {
         this.filhos = filhos;
     }
 
