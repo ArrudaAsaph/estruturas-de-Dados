@@ -1,3 +1,4 @@
+package arvoreGenerica;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -41,6 +42,14 @@ public class ArvoreGenerica {
         ArrayList<No> lista = new ArrayList<>();
         if (tamanho != 0) {
            preOrdem(raiz, lista);
+        }
+        return lista.iterator();
+    }
+
+    public Iterator<Object> elements() {
+        ArrayList<Object> lista = new ArrayList<>();
+        if (!isEmpty()) {
+            posOrdem(raiz, lista);
         }
         return lista.iterator();
     }
