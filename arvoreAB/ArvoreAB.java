@@ -31,16 +31,17 @@ public class ArvoreAB {
         return no == raiz;
     }
 
-    public No leftChild(No no) throws noElemen {
+    public No leftChild(No no)  {
         if (isExternal(no)) {
-            throw new noElemen("No não possui filhos");
+            return null;
+
         }
         return no.getFilhoEsquerdo();
     }
 
-    public No rightChild(No no) throws noElemen {
+    public No rightChild(No no)  {
         if (isExternal(no)) {
-            throw new noElemen("No não possui filhos");
+            return null;
         }
         return no.getFilhoDireito();
     }
@@ -68,6 +69,17 @@ public class ArvoreAB {
             return 0;
         }
         return 1 + depth(no.getPai());
+    }
+
+    public int height(No no) {
+        if (no == null) {
+            return 0;
+        }
+
+        int alturaLeft = height(leftChild(no));
+        int alturaRight = height(rightChild(no));
+
+        return Math.max(alturaLeft, alturaRight) + 1;
     }
 
     public void insertRoot(Object elemento) throws noElemen {
@@ -135,10 +147,10 @@ public class ArvoreAB {
 
     public void posOrdem(No no) {
         if (hasLeft(no)) {
-            preOrdem(leftChild(no));
+            posOrdem(leftChild(no));
         }
         if (hasRight(no)) {
-            preOrdem(rightChild(no));
+            posOrdem(rightChild(no));
         }
         System.out.println(no.getElemento());
 
