@@ -42,7 +42,26 @@ public class Heap {
 
     }
 
+    public No findUltimoNo(No no) {
+        if (!hasFilhoEsquerda(no)) {
+            return no;
+        }
+        
+        if (!hasFilhoDireiro(no)) {
+            return no;
+        }
 
+        
+    }
+
+
+    public boolean hasFilhoEsquerda(No no) {
+        return no.getFilhoEsquerdo() != null;
+    }
+
+    public boolean hasFilhoDireiro(No no) {
+        return no.getFilhoDireito() != null;
+    }
     
 
     
