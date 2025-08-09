@@ -6,9 +6,7 @@ public class Heap {
     private No ultimoNo;
     
     public Heap (int elemento) {
-        No no = new No(null, elemento);
-
-        this.raiz = no;
+        this.raiz = null;
         this.tamanho = 1;
         
     }
@@ -42,13 +40,13 @@ public class Heap {
 
     }
 
-    public No findUltimoNo(No no) {
-        if (!hasFilhoEsquerda(no)) {
-            return no;
-        }
-        
-        if (!hasFilhoDireiro(no)) {
-            return no;
+    public void inserir(int valor) {
+        No novoNo = new No(null, valor);
+
+        if (raiz == null) {
+            raiz = novoNo;
+            ultimoNo = novoNo;
+            tamanho++;
         }
 
         
