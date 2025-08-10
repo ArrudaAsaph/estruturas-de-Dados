@@ -5,9 +5,9 @@ public class Heap {
     private No raiz;
     private No ultimoNo;
     
-    public Heap (int elemento) {
+    public Heap () {
         this.raiz = null;
-        this.tamanho = 1;
+        this.tamanho = 0;
         
     }
 
@@ -47,8 +47,27 @@ public class Heap {
             raiz = novoNo;
             ultimoNo = novoNo;
             tamanho++;
+            printHeapSide();
+            return;
         }
 
+        No novoUltimoNo = buscarProximo(ultimoNo);
+        No novo = new No(novoUltimoNo, valor);
+
+        if (novoUltimoNo.getFilhoEsquerdo() == null) {
+            novoUltimoNo.setFilhoEsquerdo(novo);
+            ultimoNo = novo;
+            tamanho++;
+            printHeapSide();
+            return;
+        } 
+        novoUltimoNo.setFilhoDireito(novo);
+        ultimoNo = novo;
+        tamanho++;
+
+        heapOrder(novo);
+        printHeapSide();
+        return;
         
     }
 
@@ -61,6 +80,43 @@ public class Heap {
         return no.getFilhoDireito() != null;
     }
     
+    public void printHeapSide() {
+        printHeapSideRec(raiz, 0);
+    }
+
+    private void printHeapSideRec(No no, int nivel) {
+        if (no == null) return;
+        printHeapSideRec(no.getFilhoDireito(), nivel + 1);
+        System.out.println("    ".repeat(nivel) + no.getValor());
+        printHeapSideRec(no.getFilhoEsquerdo(), nivel + 1);
+    }
+
+
+    public No buscarUltimoNo(No no) {
+        No pai = no.getPai(); 
+
+        if (pai == null) { // O pai é o raiz? Sim -> Procuro o filho mais a esquerda
+            return buscarProximo(raiz);
+        }
+        if (pai.getFilhoEsquerdo() == no) { // O no é o filho esquerdo?
+            No irmao = pai.getFilhoDireito();
+
+            if (irmao == null) { // Se o irmão for nulo ele é onde precisa ser adiconado
+                return pai;
+            }
+
+            return buscarProximo(irmao); // Procuro o filho mais a esquerda do irmão
+        }
+
+        return buscarUltimoNo(pai); // Passo o pai até atender os casos base
+    }
+
+    private No buscarProximo(No no) {
+        if (no.getFilhoEsquerdo() == null) {
+            return no;
+        }
+        return buscarProximo(no.getFilhoEsquerdo());
+    }
 
     
 
