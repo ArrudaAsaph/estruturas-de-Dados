@@ -36,9 +36,74 @@ public class Heap {
         return pai.getFilhoDireito();
     }
 
+    public No irmaoEsquerdo(No no) {
+        No pai = no.getPai();
+        return pai.getFilhoEsquerdo();
+    }
+
     public No ultimoNo() {
         return this.ultimoNo;
     }
+    public void removerUltimo() {
+        if (isEmpty()) {
+            return;
+        }
+
+        No removerUltimoNo = ultimoNo;
+
+        No novoUltimoNo = buscarProximoNo(ultimoNo);
+
+        No pai = pai(removerUltimoNo);
+
+        if (pai.getFilhoEsquerdo() == removerUltimoNo) {
+            pai.setFilhoEsquerdo(null);
+        } else {
+            pai.setFilhoDireito(null);
+        }
+
+        ultimoNo = novoUltimoNo;
+
+        tamanho--;
+
+    }
+   
+    public void removerRaiz() {
+        if (isEmpty()) {
+            return;
+        }
+
+        if (tamanho == 1) {
+            raiz = null;
+            ultimoNo = null;
+            tamanho = 0;
+            return;
+        }
+
+        raiz.setElemento(ultimoNo.getElemento());
+        raiz.setKey(ultimoNo.getKey());
+        removerUltimo();
+        heapDown(raiz);
+    }
+
+
+    private void heapDown(No no) {
+        if (no == null) return;
+
+        No menor = no;
+
+        if (no.getFilhoEsquerdo() != null && no.getFilhoEsquerdo().getKey() < menor.getKey()) {
+            menor = no.getFilhoEsquerdo();
+        }
+
+        if (no.getFilhoDireito() != null && no.getFilhoDireito().getKey() < menor.getKey()) {
+            menor = no.getFilhoDireito();
+        }
+
+        if (menor != no) {
+            swap(no, menor);
+            heapDown(menor);
+        }
+}
 
     public void inserir(int key, Object elemento) {
         No novoNo = new No(elemento, key, null);
@@ -130,5 +195,34 @@ public class Heap {
         no2.setKey(tempKey);
     }
 
+    public No buscarProximoNo(No no) {
+        No pai = pai(no);
+             
 
+        while (pai != null && filhoEsquerdo(pai) == no ) {
+            no = pai;
+            pai = pai(pai);
+        }
+
+        if (pai == null) {
+            return descerDireito(raiz);
+        } else {
+            No irmao = irmaoEsquerdo(no);
+            if (irmao == null) {
+                return pai;
+            } else {
+                return descerDireito(irmao);
+            }
+        }
+
+
+    }
+
+    private No descerDireito(No no) {
+        if (no.getFilhoDireito() == null) {
+            return no;
+        }
+
+        return descerDireito(no.getFilhoDireito());
+    }
 }
