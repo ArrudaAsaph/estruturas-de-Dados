@@ -26,22 +26,44 @@ public class ArvoreAVL {
             tamanho++;
             raiz = novo_no;
         } else {
-            inserir_recu(raiz, chave, elemento);
-
+            No pai = insertRecu(raiz, chave);
+            No novo_no = new No(chave, elemento);
+            novo_no.setPai(pai);
+            if (pai.getChave() > chave) {
+                pai.setFilhoEsquerdo(novo_no);
+            } else {
+                pai.setFilhoDireito(novo_no);
+            }
+            tamanho++;
         }
     }
 
-    public No buscar(No atual, int chave) {
-        
-        if (atual == null) {
-            return null;
+    private void atualizarFB(No no, boolean tipo) {
+        if (tipo) {
+            
+            while (FB()) 
         }
-        if (chave == atual.getChave()) {
-            return atual;
-        } else if (chave < atual.getChave()) {
-            return buscar(atual.getFilhoEsquerdo(), chave);
+    }
+
+    private int FB(No no) {
+        return no.getFator_balanceamento();
+    }
+
+     private No insertRecu(No atual, int chave) {
+        if (atual.getChave() > chave) {
+            if (hasLeft(atual)){
+                insertRecu(atual.getFilhoEsquerdo(), chave);
+            } else {
+                return atual;
+            }
         } else {
-            return buscar(atual.getFilhoDireito(), chave);
+            if (hasRight(atual)) {
+                insertRecu(atual.getFilhoDireito(), chave);
+            } else{
+                return atual;
+            }
         }
-    }
+        return null;
+     }
+ 
 }
