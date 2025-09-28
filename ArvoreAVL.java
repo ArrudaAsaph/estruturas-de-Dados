@@ -44,25 +44,25 @@ public class ArvoreAVL {
 
     private void atualizarFB(No no, boolean tipo) {
         if (tipo) {
-           atualizaPai(no, no.getPai());
+        //    atualizaPai(no, no.getPai());
+            atualizarNo(no, tipo);
 
+        //    while (no != null && FB(no.getPai()) != 0) {
+        //         no = no.getPai();
+        //         atualizaPai(no, no.getPai());
+        //         // if (FB(no) > 1 && FB(no.getFilhoEsquerdo()) > 0) {
+        //         //     System.out.println("Simples a direita\n");
+        //         //     System.out.println(String.format("No = %d | FB(%d)\n", no.getChave(), FB(no)));
+        //         //     System.out.println(String.format("FilhoEsquerdo = %d | FB(%d)", no.getFilhoEsquerdo().getChave(), FB(no.getFilhoEsquerdo())));
 
-           while (no != null && FB(no.getPai()) != 0) {
-                no = no.getPai();
-                atualizaPai(no, no.getPai());
-                // if (FB(no) > 1 && FB(no.getFilhoEsquerdo()) > 0) {
-                //     System.out.println("Simples a direita\n");
-                //     System.out.println(String.format("No = %d | FB(%d)\n", no.getChave(), FB(no)));
-                //     System.out.println(String.format("FilhoEsquerdo = %d | FB(%d)", no.getFilhoEsquerdo().getChave(), FB(no.getFilhoEsquerdo())));
+        //         //     print();
+        //         //     System.out.println("-------------------------------------------------------");
+        //         //     simplesDireita(no);
+        //         //     print();
+        //         //     System.out.println("-------------------------------------------------------");
 
-                //     print();
-                //     System.out.println("-------------------------------------------------------");
-                //     simplesDireita(no);
-                //     print();
-                //     System.out.println("-------------------------------------------------------");
-
-                // }
-                }
+        //         // }
+        //         }
  
         }
     }
@@ -73,43 +73,152 @@ public class ArvoreAVL {
     }
 
     private void simplesDireita(No pai) {
-        No avo = pai.getPai();
+        // System.out.print(String.format("SIMPLES DIREITA \n"));
+        // System.out.print(String.format("Pai : %d | FB : %d \n",pai.getChave(), FB(pai)));
+        // System.out.print(String.format("Filho : %d | FB : %d \n",pai.getFilhoEsquerdo().getChave(), FB(pai.getFilhoEsquerdo())));
+        
+        
 
+        //                      AVO
+        //                  PAI
+        //      fEsquerdo
+        // elemtno
+
+        // AVO --(FilhoEsquerdo)--> Pai
+        // PAI --(FilhoEsquerdo)--> fEsquerdo
+        // Fesquerdo --(Pai)--> Pai
+
+        // AVO --(FilhoEsquerdo)--> fEsquerdo
+        // fEsquerdo --(FilhoDireito)--> Pai
+        // PAI --(Pai)--> fEsquerdo
+        if (pai == null) return;
+        No avo;
         No filhoEsquerdo = pai.getFilhoEsquerdo();
-        No filhoDireito = pai.getFilhoDireito();
-        
+        No aux = null;
+        if (pai == raiz) {
+            avo = null;
+            raiz = filhoEsquerdo; // Novo Raiz
+        } else {
+            avo = pai.getPai();
+            if (avo.getFilhoDireito() == pai) {
+                avo.setFilhoDireito(filhoEsquerdo);
+            } else {
+                avo.setFilhoDireito(filhoEsquerdo);
+            }
+
+        }
+
+        if (filhoEsquerdo.getFilhoDireito() != null) {
+            aux = filhoEsquerdo.getFilhoDireito();
+            aux.setPai(pai);
+        } 
+
         filhoEsquerdo.setPai(avo);
-        
-        avo.setFilhoEsquerdo(filhoEsquerdo);
+        filhoEsquerdo.setFilhoDireito(pai);
         
         pai.setPai(filhoEsquerdo);
         
-        pai.setFilhoEsquerdo(filhoDireito);
-                
-        filhoEsquerdo.setFilhoDireito(pai);
-        
-        int fb_pai = FB(pai) - 1 - Math.max(FB(filhoEsquerdo), 0);
-        int fb_filhoEsquerdo = FB(filhoEsquerdo) - 1 + Math.min(fb_pai,0);
+        pai.setFilhoEsquerdo(aux);
 
+        int fb_pai = FB(pai) - 1 - Math.max(FB(filhoEsquerdo),0);
+
+        int fb_filhoEsquerdo = FB(filhoEsquerdo) - 1 + Math.min(fb_pai,0);
+        
+        pai.setFator_balanceamento(fb_pai);
         filhoEsquerdo.setFator_balanceamento(fb_filhoEsquerdo);
+
+    }
+
+
+    private void simplesEsquerda(No pai) {
+        // System.out.print(String.format("SIMPLES ESQUERDA \n"));
+        // System.out.print(String.format("Pai : %d | FB : %d \n",pai.getChave(), FB(pai)));
+        // System.out.print(String.format("Filho : %d | FB : %d \n",pai.getFilhoDireito().getChave(), FB(pai.getFilhoDireito())));
+
+        if (pai == null) return;
+        print();
+
+        No avo;
+        No aux = null;
+        No filhoDireito = pai.getFilhoDireito();
+        if (pai == raiz) {
+            avo = null;
+            raiz = filhoDireito; // Novo raiz
+        } else {
+            avo = pai.getPai();
+            if (avo.getFilhoEsquerdo() == pai) {
+                avo.setFilhoEsquerdo(filhoDireito);
+            } else {
+                avo.setFilhoDireito(filhoDireito);
+            }
+        }
+
+        if (filhoDireito.getFilhoEsquerdo() != null) {
+            aux = filhoDireito.getFilhoEsquerdo();
+            aux.setPai(pai);
+        }
+
+        filhoDireito.setPai(avo);
+        filhoDireito.setFilhoEsquerdo(pai);
+
+        pai.setPai(filhoDireito);
+
+        pai.setFilhoDireito(aux);
+
+       
+        
+        int fb_pai = FB(pai) + 1 - Math.min(FB(filhoDireito), 0);
+        int fb_filhoDireito = FB(filhoDireito) + 1 + Math.max(fb_pai,0);
+
+        filhoDireito.setFator_balanceamento(fb_filhoDireito);
+
         pai.setFator_balanceamento(fb_pai);
 
+        
+       
+    }
+    private void atualizarNo(No no, boolean tipo) {
+        if (raiz == no) return;
+        if (tipo) {
+            No pai = no.getPai();
+            int fb_pai = pai.getFator_balanceamento();
+            if (no == pai.getFilhoEsquerdo()) {
+                pai.setFator_balanceamento(fb_pai + 1);
+                
+                if (FB(pai) > 1 && FB(pai.getFilhoEsquerdo()) > 0 ) {
+                    simplesDireita(pai);
+                } 
+                if (FB(pai) > 1 && FB(pai.getFilhoEsquerdo()) < 0) {
+                    simplesEsquerda(pai.getFilhoEsquerdo());
+                    // System.out.println("Pai : " + pai.getChave() + "fEsquerdo : " + pai.getFilhoEsquerdo().getChave() +"f Direito : "+ pai.getFilhoDireito().getChave());
+                    simplesDireita(pai);
+                }
+                
+                if (FB(pai) == 0) return; // Condição de parada inserção
 
-        
-        
+
+                atualizarNo(pai,tipo);
+            } else {
+                pai.setFator_balanceamento(fb_pai - 1);
+
+                if (FB(pai) < -1 && FB(pai.getFilhoDireito()) < 0) {
+                    simplesEsquerda(pai);
+                }
+                if (FB(pai) < -1 && FB(pai.getFilhoDireito()) > 0) {
+                    simplesDireita(pai.getFilhoDireito());
+                    simplesEsquerda(pai);
+                }
+
+                if (FB(pai) == 0) return;
+                atualizarNo(pai, tipo);
+            }
+        }
+
+       
 
     }
 
     
-
-    private void atualizaPai(No no, No pai) {
-        if (no == raiz ||no == null) return;
-        if (pai.getFilhoEsquerdo() == no) {
-            pai.setFator_balanceamento(pai.getFator_balanceamento() + 1);
-        } else {
-            pai.setFator_balanceamento(pai.getFator_balanceamento() -1 );
-        }
-    }
 
     public No raiz() {
         return raiz;
@@ -147,7 +256,7 @@ public class ArvoreAVL {
             throw new RuntimeException("A árvore está vazia");
 
         int rows = this.altura(raiz) + 1; 
-        int columns = tamanho;
+        int columns = tamanho * 2;
         String[][] matrix = new String[rows][columns];
 
         for (int i = 0; i < rows; i++) {
@@ -165,6 +274,9 @@ public class ArvoreAVL {
             }
             System.out.println("\n");
         }
+
+        System.out.println("-------------------------------------------------------");
+
     }
 
 
