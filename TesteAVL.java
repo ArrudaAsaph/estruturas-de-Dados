@@ -2,39 +2,62 @@ import java.util.Scanner;
 
 public class TesteAVL {
     public static void main(String[] args) {
-        ArvoreAVL arvore = new ArvoreAVL();
         Scanner sc = new Scanner(System.in);
+        ArvoreAVL arvore = new ArvoreAVL();
+        int opcao;
 
-        System.out.println("=== Árvore AVL Interativa ===");
-        System.out.println("Digite um número para inserir ou 'sair' para encerrar:");
+        do {
+            System.out.println("\n=== MENU ÁRVORE AVL ===");
+            System.out.println("1 - Adicionar");
+            System.out.println("2 - Remover");
+            System.out.println("3 - Buscar");
+            System.out.println("4 - Imprimir em ordem");
+            System.out.println("0 - Sair");
+            System.out.print("Escolha uma opção: ");
+            opcao = sc.nextInt();
 
-        while (true) {
-            System.out.print(">> ");
-            String entrada = sc.nextLine();
+            switch (opcao) {
+                case 1:
+                    System.out.print("Digite a chave para adicionar: ");
+                    int chaveAdd = sc.nextInt();
+                    arvore.inserir(chaveAdd, "Elemento " + chaveAdd);
+                    System.out.println("Inserido com sucesso!");
+                    arvore.print();
+                    break;
 
-            if (entrada.equalsIgnoreCase("sair")) {
-                System.out.println("Encerrando...");
-                break;
+                case 2:
+                    System.out.print("Digite a chave para remover: ");
+                    int chaveRemover = sc.nextInt();
+                    arvore.remover(chaveRemover);
+                    System.out.println("Removido (se existia).");
+                    arvore.print();
+                    break;
+
+                case 3:
+                    System.out.print("Digite a chave para buscar: ");
+                    int chaveBuscar = sc.nextInt();
+                    var no = arvore.buscar(arvore.raiz(),chaveBuscar,0);
+                    if (no != null) {
+                        System.out.println("Encontrado: chave " + no.getChave() +
+                                           " | elemento: " + no.getElemento());
+                    } else {
+                        System.out.println("Chave não encontrada!");
+                    }
+                    break;
+
+                case 4:
+                    arvore.print();
+                    break;
+
+                case 0:
+                    System.out.println("Encerrando...");
+                    break;
+
+                default:
+                    System.out.println("Opção inválida!");
             }
-
-            try {
-                int chave = Integer.parseInt(entrada);
-                arvore.inserir(chave, "Elemento " + chave);
-                arvore.print();
-            } catch (NumberFormatException e) {
-                System.out.println("Entrada inválida! Digite um número ou 'sair'.");
-            }
-        }
+        } while (opcao != 0);
 
         sc.close();
-    }
-
-    // Método auxiliar para impressão em ordem (se quiser usar)
-    private static void imprimirInOrdem(No no) {
-        if (no != null) {
-            imprimirInOrdem(no.getFilhoEsquerdo());
-            System.out.println("Chave: " + no.getChave() + " | Elemento: " + no.getElemento());
-            imprimirInOrdem(no.getFilhoDireito());
-        }
     }
 }

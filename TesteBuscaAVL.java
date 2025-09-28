@@ -4,13 +4,13 @@ public class TesteBuscaAVL {
 
         System.out.println("=== Teste de Inserção e Busca na AVL ===");
 
-        for (int i = 1; i <= 1000000; i++) {
+        for (int i = 1; i <= 10; i++) {
             arvore.inserir(i, "Elemento_" + i);
         }
 
         // Testando buscas
        System.out.println("\n--- BUSCA ---");
-        No no = arvore.buscar(arvore.raiz(), 750000, 0); 
+        No no = arvore.buscar(arvore.raiz(), 11, 0); 
         System.out.println(no.getChave());
 
     }   

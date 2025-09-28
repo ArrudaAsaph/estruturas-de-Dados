@@ -32,18 +32,56 @@ public class ArvoreAVL {
             novo_no.setPai(pai);
             if (pai.getChave() > chave) {
                 pai.setFilhoEsquerdo(novo_no);
-                atualizarFB(novo_no, true);
+                atualizarNo(novo_no, true);
             } else {
                 pai.setFilhoDireito(novo_no);
-                atualizarFB(novo_no, true);
+                atualizarNo(novo_no, true);
 
             }
             
         }
     }
 
+    public No remover(int chave) {
+        No atual = buscar(raiz, chave, 0);
+        
+        // System.out.println("\n ATUAL: " + atual.getChave());
+        // System.out.println("\n FEsquerdo: " + atual.getFilhoEsquerdo());
+        // System.out.println("\n FDireito: " + atual.getFilhoDireito());
+        // System.out.println("\n PAI: " + atual.getPai().getChave());
+        No pai;
+        if (atual == raiz) pai = null;
+        else pai = atual.getPai();
+        if (atual.getFilhoDireito() == null && atual.getFilhoEsquerdo() == null) {
+            atualizarNo(atual, false);
+            // System.out.println("\n VOLTEI" );
+
+             
+            // System.out.println("\n ATUAL: " + pai.getChave());
+            // System.out.println("\n FEsquerdo: " + pai.getFilhoEsquerdo());
+            // System.out.println("\n FDireito: " + pai.getFilhoDireito());
+            // System.out.println("\n PAI: " + pai.getPai().getChave());
+
+            if (pai.getFilhoEsquerdo() == atual) {
+                pai.setFilhoEsquerdo(null);
+            } else {
+                pai.setFilhoDireito(null);
+            }
+            atual.setPai(null); 
+
+        }
+        tamanho--;
+        return atual;
+    }
+
+    private No sucessor(No no) {
+        if (no.getFilhoEsquerdo() == null) return no;
+
+        return sucessor(no.getFilhoEsquerdo());
+    }
+
     public No buscar(No no, int chave, int qtd_busca) {
-        if (no == null) return null;
+        if (no.getFilhoDireito() == null && no.getFilhoDireito() == null) return no;
 
     
 
@@ -53,36 +91,14 @@ public class ArvoreAVL {
         }
 
         else if (chave > no.getChave()) {
+            System.out.println("\nChave atual : " + no.getChave() );
+
             return buscar(no.getFilhoDireito(), chave, 1 + qtd_busca);
         } else {
             return buscar(no.getFilhoEsquerdo(), chave, 1+ qtd_busca);
         }
     }
 
-    private void atualizarFB(No no, boolean tipo) {
-        if (tipo) {
-        //    atualizaPai(no, no.getPai());
-            atualizarNo(no, tipo);
-
-        //    while (no != null && FB(no.getPai()) != 0) {
-        //         no = no.getPai();
-        //         atualizaPai(no, no.getPai());
-        //         // if (FB(no) > 1 && FB(no.getFilhoEsquerdo()) > 0) {
-        //         //     System.out.println("Simples a direita\n");
-        //         //     System.out.println(String.format("No = %d | FB(%d)\n", no.getChave(), FB(no)));
-        //         //     System.out.println(String.format("FilhoEsquerdo = %d | FB(%d)", no.getFilhoEsquerdo().getChave(), FB(no.getFilhoEsquerdo())));
-
-        //         //     print();
-        //         //     System.out.println("-------------------------------------------------------");
-        //         //     simplesDireita(no);
-        //         //     print();
-        //         //     System.out.println("-------------------------------------------------------");
-
-        //         // }
-        //         }
- 
-        }
-    }
 
     private int FB(No no) {
         if (no == null) return 0;
@@ -146,7 +162,6 @@ public class ArvoreAVL {
 
     }
 
-
     private void simplesEsquerda(No pai) {
         // System.out.print(String.format("SIMPLES ESQUERDA \n"));
         // System.out.print(String.format("Pai : %d | FB : %d \n",pai.getChave(), FB(pai)));
@@ -194,11 +209,12 @@ public class ArvoreAVL {
         
        
     }
+    
     private void atualizarNo(No no, boolean tipo) {
         if (raiz == no) return;
+        No pai = no.getPai();
+        int fb_pai = pai.getFator_balanceamento();
         if (tipo) {
-            No pai = no.getPai();
-            int fb_pai = pai.getFator_balanceamento();
             if (no == pai.getFilhoEsquerdo()) {
                 pai.setFator_balanceamento(fb_pai + 1);
                 
@@ -230,32 +246,53 @@ public class ArvoreAVL {
                 atualizarNo(pai, tipo);
             }
         }
+        
+        else {
+            System.out.println("CHEGUEI AQUI REMOÇÃO\n\n\n");
+            
+           
+            // System.out.println("Pai : " + pai.getChave() + "fEsquerdo : " + pai.getFilhoEsquerdo().getChave() +"f Direito : "+ pai.getFilhoDireito().getChave());
 
-       
+            if (no == pai.getFilhoEsquerdo()) {
+                pai.setFator_balanceamento(FB(pai) - 1);
+                
+                if (FB(pai) > -1 && FB(pai.getFilhoDireito()) == 0) {
+                    simplesDireita(pai);
+                }
+
+                if (FB(pai) != 0) return;
+                atualizarNo(pai, tipo);
+
+            } else {
+                pai.setFator_balanceamento(FB(pai) + 1);
+                
+                if (FB(pai) != 0) return;
+                atualizarNo(pai, tipo);
+            }
+       }
 
     }
-
-    
 
     public No raiz() {
         return raiz;
     }
  
-     private No insertRecu(No atual, int chave) {
-    if (atual.getChave() > chave) {
-        if (hasLeft(atual)) {
-            return insertRecu(atual.getFilhoEsquerdo(), chave); 
+    private No insertRecu(No atual, int chave) {
+        
+        if (atual.getChave() > chave) {
+            if (hasLeft(atual)) {
+                return insertRecu(atual.getFilhoEsquerdo(), chave); 
+            } else {
+                return atual;
+            }
         } else {
-            return atual;
-        }
-    } else {
-        if (hasRight(atual)) {
-            return insertRecu(atual.getFilhoDireito(), chave); 
-        } else {
-            return atual;
+            if (hasRight(atual)) {
+                return insertRecu(atual.getFilhoDireito(), chave); 
+            } else {
+                return atual;
+            }
         }
     }
-}
 
     public int altura(No no) {
         if (no == null) 
@@ -266,7 +303,6 @@ public class ArvoreAVL {
 
         return 1 + Math.max(hEsq, hDir);
     }
-
 
     public void print() {
         if (this.isEmpty()) 
@@ -295,7 +331,6 @@ public class ArvoreAVL {
         System.out.println("-------------------------------------------------------");
 
     }
-
 
     private void inOrderPrint(No no, String[][] matrix, int[] atualColumn) {
         if (no == null)
