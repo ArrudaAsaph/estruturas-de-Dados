@@ -42,6 +42,23 @@ public class ArvoreAVL {
         }
     }
 
+    public No buscar(No no, int chave, int qtd_busca) {
+        if (no == null) return null;
+
+    
+
+        if (no.getChave() == chave) {
+            System.out.println("Quantidade de interação : " + qtd_busca + "\n");
+            return no;
+        }
+
+        else if (chave > no.getChave()) {
+            return buscar(no.getFilhoDireito(), chave, 1 + qtd_busca);
+        } else {
+            return buscar(no.getFilhoEsquerdo(), chave, 1+ qtd_busca);
+        }
+    }
+
     private void atualizarFB(No no, boolean tipo) {
         if (tipo) {
         //    atualizaPai(no, no.getPai());
@@ -136,7 +153,7 @@ public class ArvoreAVL {
         // System.out.print(String.format("Filho : %d | FB : %d \n",pai.getFilhoDireito().getChave(), FB(pai.getFilhoDireito())));
 
         if (pai == null) return;
-        print();
+        // print();
 
         No avo;
         No aux = null;
