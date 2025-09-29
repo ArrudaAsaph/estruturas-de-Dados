@@ -12,6 +12,7 @@ public class TesteAVL {
             System.out.println("2 - Remover");
             System.out.println("3 - Buscar");
             System.out.println("4 - Imprimir em ordem");
+            System.out.println("5 - Teste Remoção");
             System.out.println("0 - Sair");
             System.out.print("Escolha uma opção: ");
             opcao = sc.nextInt();
@@ -48,6 +49,14 @@ public class TesteAVL {
                 case 4:
                     arvore.print();
                     break;
+                
+                case 5:
+                     for (int i = 10; i <= 80; i += 10) {
+                        arvore.inserir(i,"A");
+                        System.out.println("Inserido: " + i);
+                    }
+                    arvore.print();
+
 
                 case 0:
                     System.out.println("Encerrando...");
