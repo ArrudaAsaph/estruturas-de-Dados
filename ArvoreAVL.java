@@ -56,7 +56,7 @@ public class ArvoreAVL {
             } else {
                 pai.setFilhoDireito(novo_no);
             }
-            atualizarNo(novo_no, true, 0);
+            atualizarNo(novo_no);
         }
     }
 
@@ -80,7 +80,7 @@ public class ArvoreAVL {
         }
 
         No pai = atual.getPai();
-
+        No no_sucessor;
         // Nó folha
         if (!hasLeft(atual) && !hasRight(atual)) {
             int filhoEsquerdo;
@@ -92,8 +92,19 @@ public class ArvoreAVL {
                 filhoEsquerdo = 1;
             }
             atual.setPai(null);
-            atualizarNo(pai, false, filhoEsquerdo);
+            atualizarNoRemocao(pai,filhoEsquerdo);
+        } else if (hasLeft(atual) || hasRight(atual)) {
+            
+            no_sucessor = sucessor(atual.getFilhoDireito());
+            System.out.println("no SUCESSOR");
+
+            
+
+
+            imprimirNo(no_sucessor);
         }
+
+        
         return atual;
     }
 
@@ -107,10 +118,10 @@ public class ArvoreAVL {
         if (no.getFilhoDireito() == null && no.getFilhoDireito() == null) return no; // base
 
         if (no.getChave() == chave) {
-            System.out.println("Quantidade de interação : " + qtd_busca + "\n");
+            // System.out.println("Quantidade de interação : " + qtd_busca + "\n");
             return no;
         } else if (chave > no.getChave()) {
-            System.out.println("\nChave atual : " + no.getChave());
+            // System.out.println("\nChave atual : " + no.getChave());
             return buscar(no.getFilhoDireito(), chave, qtd_busca + 1);
         } else {
             return buscar(no.getFilhoEsquerdo(), chave, qtd_busca + 1);
@@ -148,7 +159,7 @@ public class ArvoreAVL {
         No filhoEsquerdo = pai.getFilhoEsquerdo();
         No aux = null;
 
-        imprimirNo(pai);
+ //       imprimirNo(pai);
         if (pai == raiz) {
             avo = null;
             raiz = filhoEsquerdo;
@@ -186,7 +197,7 @@ public class ArvoreAVL {
         No aux = null;
         No filhoDireito = pai.getFilhoDireito();
 
-        imprimirNo(pai);
+//        imprimirNo(pai);
         if (pai == raiz) {
             avo = null;
             raiz = filhoDireito;
@@ -220,91 +231,114 @@ public class ArvoreAVL {
     }
 
     // Atualização 
-    private void atualizarNo(No no, boolean tipo, int filhoEsquerdo) {
-        if (raiz == no) return;
+    private void atualizarNo(No no) {
+        if (raiz == no) return; // chegou na raiz
 
-        if (tipo) { // Inserção
-            No pai = no.getPai();
-            int fb_pai = pai.getFator_balanceamento();
+        No pai = no.getPai();
+        int fb_pai = pai.getFator_balanceamento();
 
-            if (no == pai.getFilhoEsquerdo()) {
-                pai.setFator_balanceamento(fb_pai + 1);
+        // fe + 1 - inserção
+        if (no == pai.getFilhoEsquerdo()) {
+            pai.setFator_balanceamento(fb_pai + 1);
 
-                if (FB(pai) > 1 && FB(pai.getFilhoEsquerdo()) > 0) {
-                    simplesDireita(pai);
-                }
-                if (FB(pai) > 1 && FB(pai.getFilhoEsquerdo()) < 0) {
-                    simplesEsquerda(pai.getFilhoEsquerdo());
-                    simplesDireita(pai);
-                }
-
-                if (FB(pai) == 0) return;
-                atualizarNo(pai, tipo, filhoEsquerdo);
-
-            } else {
-                pai.setFator_balanceamento(fb_pai - 1);
-
-                if (FB(pai) < -1 && FB(pai.getFilhoDireito()) < 0) {
-                    simplesEsquerda(pai);
-                }
-                if (FB(pai) < -1 && FB(pai.getFilhoDireito()) > 0) {
-                    simplesDireita(pai.getFilhoDireito());
-                    simplesEsquerda(pai);
-                }
-
-                if (FB(pai) == 0) return;
-                atualizarNo(pai, tipo, filhoEsquerdo);
+            if (FB(pai) > 1 && FB(pai.getFilhoEsquerdo()) > 0) {
+                simplesDireita(pai);
             }
-        } else { // Remoção
-                        
-            no.setFator_balanceamento(FB(no) + filhoEsquerdo);
-
-            if (FB(no) < -1) {
-
-                if (filhoEsquerdo == -1 && FB(no.getFilhoDireito()) < 0) {
-                    System.out.print(String.format("************Cheguei ESQUERDO***************** "));
-                    imprimirNo(no);
-                    simplesEsquerda(no);
-                        System.out.print(String.format("\n\n"));
-
-                    no = no.getPai();
-                        imprimirNo(no);
-                    imprimirNo(no);
-                   
-                    if (no == no.getPai().getFilhoEsquerdo()) {
-                        
-                        filhoEsquerdo = -1;
-                    } else {
-                        filhoEsquerdo = 1;
-                    }
-
-                    if (FB(no.getPai()) != 0) return;
-                    atualizarNo(no.getPai(), tipo, filhoEsquerdo);
-                }
-            } else {
-                if (FB(no) > 1) {
-                    System.out.print(String.format("************Direito***************** "));
-
-                    if (filhoEsquerdo == 1 && FB(no.getFilhoEsquerdo()) > 0) {
-                        imprimirNo(no);
-                        simplesDireita(no);
-                        no = no.getPai();
-                        imprimirNo(no);
-
-                        if (no == no.getPai().getFilhoEsquerdo()) {
-                            filhoEsquerdo = -1;
-                        } else {
-                            filhoEsquerdo = 1;
-                        }
-                        
-                        if (FB(no.getPai()) != 0) return;
-                        atualizarNo(no.getPai(), tipo, filhoEsquerdo);
-                    }
-                }
+            if (FB(pai) > 1 && FB(pai.getFilhoEsquerdo()) < 0) {
+                simplesEsquerda(pai.getFilhoEsquerdo());
+                simplesDireita(pai);
             }
+
+            if (FB(pai) == 0) return; // condição de continuar o recursão
+            atualizarNo(pai);
+
+        // fd - 1 - inserção
+        } else {
+            pai.setFator_balanceamento(fb_pai - 1);
+
+            if (FB(pai) < -1 && FB(pai.getFilhoDireito()) < 0) {
+                simplesEsquerda(pai);
+            }
+            if (FB(pai) < -1 && FB(pai.getFilhoDireito()) > 0) {
+                simplesDireita(pai.getFilhoDireito());
+                simplesEsquerda(pai);
+            }
+
+            if (FB(pai) == 0) return;
+            atualizarNo(pai);
         }
+    
     }
+    
+    private void atualizarNoRemocao(No no, int filhoEsquerdo) {
+        System.out.println("No antigo\n");
+        imprimirNo(no);
+        no.setFator_balanceamento(FB(no) + filhoEsquerdo);
+        System.out.println("Arvore após mexer no FB");
 
+        print();
+        if (raiz == no) return; // chegou na raiz
+        No novo_pai = no;
+        if (filhoEsquerdo == -1) {
+            if (FB(no) < -1 && FB(no.getFilhoDireito()) < 0) {
+                novo_pai = simplesEsquerda(no);
+                System.out.println("Arvore após a rotação\n");
+                
+                print();
+
+                System.out.println("Novo Pai\n");
+                imprimirNo(novo_pai);
+
+                System.out.println("No ANTIGO\n");
+                imprimirNo(no);              
+
+            }
+        
+        } else {
+            System.out.println("cheguei no direito\n");
+            
+            if(FB(no) > 1 && FB(no.getFilhoEsquerdo()) >= 0) {
+                novo_pai = simplesDireita(no);
+                System.out.println("Arvore após a rotação\n");
+
+                print();
+
+                System.out.println("Novo Pai\n");
+                imprimirNo(novo_pai);
+
+                System.out.println("No ANTIGO\n");
+                imprimirNo(no);
+
+                if (FB(novo_pai) != 0) return;
+
+                 if (novo_pai.getPai().getFilhoEsquerdo() == novo_pai ) {
+                    filhoEsquerdo = -1;
+                } else {
+                    filhoEsquerdo = 1;
+                }
+
+                atualizarNoRemocao(novo_pai.getPai(), filhoEsquerdo);
+            }
+
+            System.out.println("sai do direito\n");
+
+        }
+
+        
+        
+        System.out.println("No novo pai\n");
+        imprimirNo(novo_pai);
+
+        if (novo_pai.getPai().getFilhoEsquerdo() == novo_pai ) {
+            filhoEsquerdo = -1;
+        } else {
+            filhoEsquerdo = 1;
+        }
+        if (FB(novo_pai) != 0) return;
+
+        atualizarNoRemocao(novo_pai.getPai(), filhoEsquerdo);
+        
+    }
     // Impressão
     public void print() {
         if (this.isEmpty())
