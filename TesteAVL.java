@@ -21,7 +21,7 @@ public class TesteAVL {
                 case 1:
                     System.out.print("Digite a chave para adicionar: ");
                     int chaveAdd = sc.nextInt();
-                    arvore.inserir(chaveAdd, "Elemento " + chaveAdd);
+                    arvore.inserir(chaveAdd, "Elemento " );
                     System.out.println("Inserido com sucesso!");
                     arvore.print();
                     break;
