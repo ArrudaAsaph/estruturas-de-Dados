@@ -33,7 +33,7 @@ public class ArvoreRubroNegro {
 
             }
 
-            balancearArvore(pai, novo_no);
+            balancearArvore(novo_no);
 
         }
         
@@ -41,25 +41,43 @@ public class ArvoreRubroNegro {
 
    
 
-    private void balancearArvore(No pai, No atual) {
-        imprimirNo(pai);
-        imprimirNo(atual);
-        if (cor(pai) == "preto") {
-            System.out.println("PAI É PRETO");
+    private void balancearArvore(No atual) {
+
+        // imprimirNo(atual);
+        No pai = atual.getPai();
+        
+        if (pai == null || cor(pai) == "preto") {
+            System.out.println("\n\nSAINDOOOO\n\n");
             return;
         }
+
         Parente parentes = pegarParentes(pai);
 
         No avo = parentes.getAvo();
         No tio = parentes.getTio();
+        No sobrinhoPerto = parentes.getSobrinhoPerto();
+        No sobrinhoLonge = parentes.getSobrinhoLonge();
+
 // ========================== CASO 2 ======================================
         if (
             cor(pai) == "vermelho" &&
             cor(tio) == "vermelho" &&
             cor(avo) == "preto" ) {
+            System.out.println("Cheguei -----> ANTES");
+            print();
+            imprimirNo(avo);
+            imprimirNo(pai);
+            imprimirNo(tio);
             mudarCor(pai, "preto");
             mudarCor(tio, "preto");
             mudarCor(avo, "vermelho");
+            System.out.println("Cheguei -----> DEPOIS");
+
+            imprimirNo(avo);
+            imprimirNo(pai);
+            imprimirNo(tio);
+
+            balancearArvore(avo);
         }
 
 
@@ -67,26 +85,54 @@ public class ArvoreRubroNegro {
 
     private Parente pegarParentes(No pai) {
         Parente parentes = new Parente();
+        // if (pai == raiz) {
+        //     return parentes;
+        // } else {
+        //     No avo = pai.getPai();
+        //     No tio;
+        //     if (avo.getFilhoDireito() == pai) {
+        //         tio = avo.getFilhoEsquerdo();
+        //     } else {
+        //         tio = avo.getFilhoDireito();
+        //     }
+
+        //     parentes.setAvo(avo);
+        //     parentes.setTio(tio);
+        //     return parentes;
+        // }
+
         if (pai == raiz) {
             return parentes;
         } else {
-            No avo = pai.getPai();
+            No avo = pai.getPai(); // Pegando vovo
             No tio;
-            if (avo.getFilhoDireito() == pai) {
+            No sobrinhoPerto;
+            No sobrinhoLonge;
+            if ( avo.getFilhoDireito() == pai) {
                 tio = avo.getFilhoEsquerdo();
+                sobrinhoPerto = tio.getFilhoDireito();
+                sobrinhoLonge = tio.getFilhoEsquerdo();
             } else {
                 tio = avo.getFilhoDireito();
+                sobrinhoPerto = tio.getFilhoEsquerdo();
+                sobrinhoLonge = tio.getFilhoDireito();
             }
 
             parentes.setAvo(avo);
             parentes.setTio(tio);
+            parentes.setSobrinhoLonge(sobrinhoLonge);
+            parentes.setSobrinhoPerto(sobrinhoPerto);
+
             return parentes;
+
         }
         
     }
 
 
     private void mudarCor(No no, String cor) {
+        if (no == null) return;
+
         if (no == raiz) {
             no.setCor("preto");
         } else {
