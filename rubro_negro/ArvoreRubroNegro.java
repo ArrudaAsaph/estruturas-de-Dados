@@ -22,7 +22,7 @@ public class ArvoreRubroNegro {
         else {
             tamanho++;
             No pai = buscar(raiz, chave);
-            System.out.println("BUSCA ---- CHAVE" + chave);
+            System.out.println("BUSCA ---- CHAVE " + chave);
             imprimirNo(pai);
             No novo_no = new No(pai, chave);
 
@@ -79,8 +79,63 @@ public class ArvoreRubroNegro {
 
             balancearArvore(avo);
         }
+// ========================== CASO 3 ======================================
+        if (
+            cor(pai) == "vermelho" &&
+            cor(tio) == "preto" && 
+            cor(avo) == "preto" ) {
+
+                print();
+                // simples direita
+                if (avo.getFilhoDireito() == pai) {
+                } else {
+                    // simples esquerda
+                    simplesDireita(pai);
+
+                }
+            }
 
 
+    }
+
+    private void simplesDireita(No atual) {
+        No pai = atual.getPai();
+        
+        if (atual == raiz) {
+            return;
+        } else {
+            System.out.println("PAI");
+            imprimirNo(pai);
+            System.out.println("atual");
+            imprimirNo(atual);
+
+            No avo = pai.getPai();
+            
+            if (avo != null) {
+                if (avo.getFilhoDireito() == pai) {
+                    avo.setFilhoDireito(atual);
+                } else {
+                    avo.setFilhoEsquerdo(atual);
+                }
+            }
+
+            atual.setPai(avo);
+            pai.setPai(atual);
+            pai.setFilhoEsquerdo(null);
+            atual.setFilhoDireito(pai);
+
+            System.out.println("PAI");
+            imprimirNo(pai);
+            System.out.println("atual");
+            imprimirNo(atual);
+
+            if (pai == raiz) {
+                raiz = atual;
+            }
+
+            mudarCor(pai, "vermelho");
+            mudarCor(atual, "preto");
+        }
     }
 
     private Parente pegarParentes(No pai) {
@@ -108,14 +163,26 @@ public class ArvoreRubroNegro {
             No tio;
             No sobrinhoPerto;
             No sobrinhoLonge;
-            if ( avo.getFilhoDireito() == pai) {
+            if (avo.getFilhoDireito() == pai) {
                 tio = avo.getFilhoEsquerdo();
-                sobrinhoPerto = tio.getFilhoDireito();
-                sobrinhoLonge = tio.getFilhoEsquerdo();
+                if (tio == null) {
+                    sobrinhoLonge = null;
+                    sobrinhoPerto = null;
+                } else {
+                    sobrinhoPerto = tio.getFilhoDireito();
+                    sobrinhoLonge = tio.getFilhoEsquerdo();
+                }
+
             } else {
                 tio = avo.getFilhoDireito();
-                sobrinhoPerto = tio.getFilhoEsquerdo();
-                sobrinhoLonge = tio.getFilhoDireito();
+                                if (tio == null) {
+                    sobrinhoLonge = null;
+                    sobrinhoPerto = null;
+                } else {
+                    sobrinhoPerto = tio.getFilhoEsquerdo();
+                    sobrinhoLonge = tio.getFilhoDireito();
+                }
+
             }
 
             parentes.setAvo(avo);
@@ -128,7 +195,6 @@ public class ArvoreRubroNegro {
         }
         
     }
-
 
     private void mudarCor(No no, String cor) {
         if (no == null) return;
@@ -242,19 +308,22 @@ public class ArvoreRubroNegro {
 }
  
     public No buscar(No no, int chave) {
-        
-        // imprimirNo(no);
-        if (
-            no.getFilhoDireito() == null || 
-            no.getFilhoEsquerdo() == null )
-            {
 
-            return no;
-        }
+        System.out.println("No que foi passado");
+        imprimirNo(no);
+        if (no == null ) return null;
+        
 
         if (chave == no.getChave()) {
             return no;
         }
+
+        if (
+            (chave < no.getChave() && no.getFilhoEsquerdo() == null) ||
+            (chave > no.getChave() && no.getFilhoDireito() == null)) {
+                return no;
+            }
+
         else if (chave > no.getChave()) {
             System.out.println("Chegeuei");
             return buscar(no.getFilhoDireito(), chave);
