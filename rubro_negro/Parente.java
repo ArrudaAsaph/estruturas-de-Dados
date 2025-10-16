@@ -2,6 +2,8 @@ package rubro_negro;
 
 public class Parente {
     private No avo;
+    private No pai;
+    private No atual;
     private No tio;
     private No sobrinhoPerto;
     private No sobrinhoLonge;
@@ -11,7 +13,35 @@ public class Parente {
         this.tio = null;
         this.sobrinhoPerto = null;
         this.sobrinhoLonge = null;
+        this.pai = null;
+        this.atual = null;
     }
+
+    
+
+    public No getPai() {
+        return pai;
+    }
+
+
+
+    public void setPai(No pai) {
+        this.pai = pai;
+    }
+
+
+
+    public No getAtual() {
+        return atual;
+    }
+
+
+
+    public void setAtual(No atual) {
+        this.atual = atual;
+    }
+
+
 
     public void setAvo(No avo) {
         this.avo = avo;

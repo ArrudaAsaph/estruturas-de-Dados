@@ -20,21 +20,26 @@ public class ArvoreRubroNegro {
             tamanho++;
         }
         else {
-            tamanho++;
             No pai = buscar(raiz, chave);
-            System.out.println("BUSCA ---- CHAVE " + chave);
-            imprimirNo(pai);
-            No novo_no = new No(pai, chave);
-
-            if (chave >= pai.getChave()) {
-                pai.setFilhoDireito(novo_no);
+            if (pai.getChave() == chave) {
+                System.out.println("Não é permito adicionar dois valores iguais");
             } else {
-                pai.setFilhoEsquerdo(novo_no);
+                tamanho++;
+                System.out.println("BUSCA ---- CHAVE " + chave);
+                imprimirNo(pai);
+                No novo_no = new No(pai, chave);
+
+                if (chave >= pai.getChave()) {
+                    pai.setFilhoDireito(novo_no);
+                } else {
+                    pai.setFilhoEsquerdo(novo_no);
+
+                }
+
+                balancearArvore(novo_no);
 
             }
-
-            balancearArvore(novo_no);
-
+            
         }
         
     }
@@ -86,56 +91,121 @@ public class ArvoreRubroNegro {
             cor(avo) == "preto" ) {
 
                 print();
-                // simples direita
-                if (avo.getFilhoDireito() == pai) {
-                } else {
-                    // simples esquerda
-                    simplesDireita(pai);
+                // simples Esquerda
+                if (isFilhoDireito(pai) && isFilhoDireito(atual)) {
+                    Parente parente = simplesEsquerda(pai);
+                    pai = parente.getPai();
+                    avo = parente.getAvo();
 
+                    // mudar a cor
+                    mudarCor(pai, "preto");
+                    mudarCor(avo, "vermelho");
+                } 
+                // Dupla Esquerda
+                if (isFilhoDireito(pai) && !isFilhoDireito(atual)) {
+                    Parente parente = simplesDireita(atual);
+
+                    parente = simplesEsquerda(parente.getPai());
+
+                    pai = parente.getPai();
+                    avo = parente.getAvo();
+
+                    // mudar a cor
+                    mudarCor(pai, "preto");
+                    mudarCor(avo, "vermelho");
                 }
+                // Simples Direita
+                if (!isFilhoDireito(pai) && !isFilhoDireito(atual)) {
+                    Parente parente = simplesDireita(pai);
+
+                    pai = parente.getPai();
+                    avo = parente.getAvo();
+                    // mudar a cor
+                    mudarCor(pai, "preto");
+                    mudarCor(avo, "vermelho");
+                } 
+                // Dupla Direita
+                if (!isFilhoDireito(pai) && isFilhoDireito(atual)) {
+                    Parente parente = simplesEsquerda(pai);
+
+                    parente = simplesDireita(parente.getPai());
+                    pai = parente.getPai();
+                    avo = parente.getAvo();
+                    // mudar a cor
+                    mudarCor(pai, "preto");
+                    mudarCor(avo, "vermelho");
+                }
+                
             }
 
 
     }
-
-    private void simplesDireita(No atual) {
-        No pai = atual.getPai();
+    private Parente simplesEsquerda(No pai) {
+        Parente parentes = new Parente();
+        No avo = pai.getPai();
+        No filhoEsquerdo = pai.getFilhoEsquerdo();
         
-        if (atual == raiz) {
-            return;
-        } else {
-            System.out.println("PAI");
-            imprimirNo(pai);
-            System.out.println("atual");
-            imprimirNo(atual);
+        No bisavo = avo.getPai();
+        if (avo == raiz) {
+            raiz = pai;
+        }
 
-            No avo = pai.getPai();
-            
-            if (avo != null) {
-                if (avo.getFilhoDireito() == pai) {
-                    avo.setFilhoDireito(atual);
+        if (bisavo != null) {
+                if (isFilhoDireito(avo)) {
+                    bisavo.setFilhoDireito(pai);
                 } else {
-                    avo.setFilhoEsquerdo(atual);
+                    bisavo.setFilhoEsquerdo(pai);
                 }
             }
 
-            atual.setPai(avo);
-            pai.setPai(atual);
-            pai.setFilhoEsquerdo(null);
-            atual.setFilhoDireito(pai);
+        pai.setPai(bisavo);
 
-            System.out.println("PAI");
-            imprimirNo(pai);
-            System.out.println("atual");
-            imprimirNo(atual);
+        pai.setFilhoEsquerdo(avo);
 
-            if (pai == raiz) {
-                raiz = atual;
+        avo.setPai(pai);
+
+        avo.setFilhoDireito(filhoEsquerdo);
+        
+        parentes.setPai(pai);
+        parentes.setAvo(avo);
+        
+        return parentes;
+    }
+
+    private Parente simplesDireita(No pai) {
+        Parente parentes = new Parente();
+        No avo = pai.getPai();
+        No filhoDireito = pai.getFilhoDireito();
+
+        
+        No bisavo = avo.getPai();
+        if (avo == raiz) {
+            raiz = pai;
+        } 
+        if (bisavo != null) {
+            if (isFilhoDireito(avo)) {
+                bisavo.setFilhoDireito(pai);
+            } else {
+                bisavo.setFilhoEsquerdo(pai);
             }
-
-            mudarCor(pai, "vermelho");
-            mudarCor(atual, "preto");
         }
+        pai.setPai(bisavo);
+
+        pai.setFilhoDireito(avo);
+
+        avo.setPai(pai);
+
+        avo.setFilhoEsquerdo(filhoDireito);
+
+        System.out.println("NO MUDADO PAI");
+        imprimirNo(pai);
+
+        parentes.setPai(pai);
+        parentes.setAvo(avo);
+        
+        return parentes;
+        
+        
     }
 
     private Parente pegarParentes(No pai) {
@@ -217,6 +287,9 @@ public class ArvoreRubroNegro {
         return no.getPai();
     }
 
+    private boolean isFilhoDireito(No no) {
+        return no.getPai().getFilhoDireito() == no;
+    }
 
 // ========================== METODOS GENERICOS ARVORE BINÁRIA ======================================
     public boolean isEmpty() {
