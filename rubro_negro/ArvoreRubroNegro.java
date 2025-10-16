@@ -337,29 +337,29 @@ public class ArvoreRubroNegro {
             inOrderPrint(no.getFilhoDireito(), matrix, atualColumn);
     }
 
-    public void print() {
-        if (this.isEmpty())
-            throw new RuntimeException("A árvore está vazia");
+    // public void print() {
+    //     if (this.isEmpty())
+    //         throw new RuntimeException("A árvore está vazia");
 
-        int rows = this.altura(raiz) + 1;
-        int columns = tamanho * 2;
-        String[][] matrix = new String[rows][columns];
+    //     int rows = this.altura(raiz) + 1;
+    //     int columns = tamanho * 2;
+    //     String[][] matrix = new String[rows][columns];
 
-        for (int i = 0; i < rows; i++)
-            for (int j = 0; j < columns; j++)
-                matrix[i][j] = " ";
+    //     for (int i = 0; i < rows; i++)
+    //         for (int j = 0; j < columns; j++)
+    //             matrix[i][j] = " ";
 
-        int[] atualColumn = {0};
-        this.inOrderPrint(this.raiz, matrix, atualColumn);
+    //     int[] atualColumn = {0};
+    //     this.inOrderPrint(this.raiz, matrix, atualColumn);
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++)
-                System.out.print(String.format("%-10s", matrix[i][j]));
-            System.out.println("\n");
-        }
+    //     for (int i = 0; i < rows; i++) {
+    //         for (int j = 0; j < columns; j++)
+    //             System.out.print(String.format("%-10s", matrix[i][j]));
+    //         System.out.println("\n");
+    //     }
 
-        System.out.println("-------------------------------------------------------");
-    }
+    //     System.out.println("-------------------------------------------------------");
+    // }
 
     public void imprimirNo(No no) {
         if (no == null) {
@@ -406,6 +406,77 @@ public class ArvoreRubroNegro {
 
     }
 
+
+    public void print() {
+    if (this.isEmpty()) {
+        System.out.println("Árvore vazia");
+        return;
+    }
+
+    int altura = this.altura(raiz);
+    int largura = (int) Math.pow(2, altura + 1) * 3;
+    String[][] matrix = new String[altura * 2 + 1][largura];
+
+    // Inicializar matriz com espaços
+    for (int i = 0; i < matrix.length; i++) {
+        for (int j = 0; j < matrix[i].length; j++) {
+            matrix[i][j] = " ";
+        }
+    }
+
+    preencherMatrix(raiz, matrix, 0, largura / 2, largura / 4);
+
+    // Imprimir matriz
+    System.out.println("\n" + "=".repeat(60));
+    System.out.println("ÁRVORE RUBRO-NEGRO (Altura: " + altura + ", Tamanho: " + tamanho + ")");
+    System.out.println("=".repeat(60));
+    
+    for (int i = 0; i < matrix.length; i++) {
+        StringBuilder linha = new StringBuilder();
+        for (int j = 0; j < matrix[i].length; j++) {
+            linha.append(matrix[i][j]);
+        }
+        System.out.println(linha.toString().replaceAll("\\s+$", "")); // Remove espaços finais
+    }
+    System.out.println("=".repeat(60));
+    
+    // Estatísticas
+    System.out.println("Raiz: " + raiz.getChave() + "[" + raiz.getCor() + "]");
+    System.out.println("Altura negra: " + calcularAlturaNegra(raiz));
+    System.out.println("=".repeat(60));
+}
+
+private void preencherMatrix(No no, String[][] matrix, int linha, int coluna, int offset) {
+    if (no == null) return;
+
+    // Cor do nó
+    String cor = no.getCor();
+    String corTexto = cor.equals("vermelho") ? "\u001B[31m" : "\u001B[30m";
+    String reset = "\u001B[0m";
+    
+    // Formatar nó
+    String noStr = String.format("%s%d%s", corTexto, no.getChave(), reset);
+    matrix[linha][coluna] = noStr;
+
+    // Conectores para filhos
+    if (hasLeft(no)) {
+        matrix[linha + 1][coluna - offset / 2] = "/";
+        preencherMatrix(no.getFilhoEsquerdo(), matrix, linha + 2, coluna - offset, offset / 2);
+    }
+
+    if (hasRight(no)) {
+        matrix[linha + 1][coluna + offset / 2] = "\\";
+        preencherMatrix(no.getFilhoDireito(), matrix, linha + 2, coluna + offset, offset / 2);
+    }
+}
+
+private int calcularAlturaNegra(No no) {
+    if (no == null) return 0;
+    int alturaEsq = calcularAlturaNegra(no.getFilhoEsquerdo());
+    int alturaDir = calcularAlturaNegra(no.getFilhoDireito());
+    int incremento = no.getCor().equals("preto") ? 1 : 0;
+    return Math.max(alturaEsq, alturaDir) + incremento;
+}
 
 // ========================== FIM -> METODOS GENERICOS ARVORE BINÁRIA ======================================
 }
