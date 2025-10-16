@@ -8,26 +8,49 @@ public class TesteRubroNegro {
         Scanner sc = new Scanner(System.in);
 
         System.out.println("=== Árvore Rubro-Negra ===");
-        System.out.println("Digite números para inserir na árvore (0 para sair):");
 
         while (true) {
-            System.out.print("Número: ");
-            int valor = sc.nextInt();
+            System.out.println("\nEscolha uma opção:");
+            System.out.println("1 - Inserir valor");
+            System.out.println("2 - Remover valor");
+            System.out.println("3 - Exibir árvore");
+            System.out.println("0 - Sair");
+            System.out.print("Opção: ");
 
-            if (valor == 0) {
-                break;
+            int opcao = sc.nextInt();
+
+            switch (opcao) {
+                case 1 -> {
+                    System.out.print("Digite o valor para inserir: ");
+                    int valorInserir = sc.nextInt();
+                    arvoreRubroNegro.inserir(valorInserir);
+                    System.out.println("✅ Valor " + valorInserir + " inserido!");
+                    arvoreRubroNegro.print();
+                }
+
+                case 2 -> {
+                    System.out.print("Digite o valor para remover: ");
+                    int valorRemover = sc.nextInt();
+                    arvoreRubroNegro.remover(valorRemover);
+                    System.out.println("❌ Valor " + valorRemover + " removido!");
+                    arvoreRubroNegro.print();
+                }
+
+                case 3 -> {
+                    System.out.println("\n🌳 Estrutura atual da árvore:");
+                    arvoreRubroNegro.print();
+                }
+
+                case 0 -> {
+                    System.out.println("\nEncerrando o programa...");
+                    sc.close();
+                    return;
+                }
+
+                default -> System.out.println("⚠️ Opção inválida! Tente novamente.");
             }
 
-            arvoreRubroNegro.inserir(valor);
-            System.out.println("Valor " + valor + " inserido!\n");
-            arvoreRubroNegro.print();
             System.out.println("----------------------------");
         }
-
-        System.out.println("\nInserção finalizada!");
-        System.out.println("Árvore final:");
-        arvoreRubroNegro.print();
-
-        sc.close();
     }
 }

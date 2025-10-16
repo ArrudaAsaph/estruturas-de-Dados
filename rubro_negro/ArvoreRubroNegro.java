@@ -26,7 +26,7 @@ public class ArvoreRubroNegro {
             } else {
                 tamanho++;
                 System.out.println("BUSCA ---- CHAVE " + chave);
-                imprimirNo(pai);
+                // imprimirNo(pai);
                 No novo_no = new No(pai, chave);
 
                 if (chave >= pai.getChave()) {
@@ -44,7 +44,42 @@ public class ArvoreRubroNegro {
         
     }
 
-   
+    public void remover(int chave) {
+        if (isEmpty()) {
+            System.out.println("Não é possivel remover, árvore vazia");
+        } else {
+            No no_removido = buscar(raiz, chave);
+            System.out.println("NO ACHADO REMOÇÃO");
+                imprimirNo(no_removido);
+
+            if (no_removido.getChave() != chave) {
+                System.out.println("No não existente");
+            } else {
+                No no_sucessor;
+                if (no_removido.getFilhoDireito() != null){
+                    no_sucessor = sucessor(no_removido.getFilhoDireito());
+                    imprimirNo(no_sucessor);
+                    No pai = no_removido.getPai();
+
+                    if (no_removido == raiz) {
+                        raiz = no_sucessor;
+                    }
+
+                
+                    if (pai != null) {
+                        if (isFilhoDireito(no_removido)) {
+                            pai.setFilhoDireito(no_sucessor);
+                        } else {
+                            pai.setFilhoEsquerdo(no_sucessor);
+                        }
+                    }
+                    
+                }
+
+                
+            }
+        }
+    }
 
     private void balancearArvore(No atual) {
 
@@ -70,17 +105,17 @@ public class ArvoreRubroNegro {
             cor(avo) == "preto" ) {
             System.out.println("Cheguei -----> ANTES");
             print();
-            imprimirNo(avo);
-            imprimirNo(pai);
-            imprimirNo(tio);
+            //imprimirNo(avo);
+            //imprimirNo(pai);
+            //imprimirNo(tio);
             mudarCor(pai, "preto");
             mudarCor(tio, "preto");
             mudarCor(avo, "vermelho");
             System.out.println("Cheguei -----> DEPOIS");
 
-            imprimirNo(avo);
-            imprimirNo(pai);
-            imprimirNo(tio);
+            //imprimirNo(avo);
+            //imprimirNo(pai);
+            //imprimirNo(tio);
 
             balancearArvore(avo);
         }
@@ -91,7 +126,7 @@ public class ArvoreRubroNegro {
             cor(avo) == "preto" ) {
 
                 print();
-                // simples Esquerda
+                // ==========================  simples Esquerda ========================== 
                 if (isFilhoDireito(pai) && isFilhoDireito(atual)) {
                     Parente parente = simplesEsquerda(pai);
                     pai = parente.getPai();
@@ -101,7 +136,7 @@ public class ArvoreRubroNegro {
                     mudarCor(pai, "preto");
                     mudarCor(avo, "vermelho");
                 } 
-                // Dupla Esquerda
+                // ==========================  Dupla Esquerda ========================== 
                 else if (isFilhoDireito(pai) && !isFilhoDireito(atual)) {
                     Parente parente = simplesDireita(atual);
 
@@ -114,7 +149,7 @@ public class ArvoreRubroNegro {
                     mudarCor(pai, "preto");
                     mudarCor(avo, "vermelho");
                 }
-                // Simples Direita
+                // ==========================  Simples Direita ========================== 
                 else if (!isFilhoDireito(pai) && !isFilhoDireito(atual)) {
                     Parente parente = simplesDireita(pai);  
 
@@ -124,7 +159,7 @@ public class ArvoreRubroNegro {
                     mudarCor(pai, "preto");
                     mudarCor(avo, "vermelho");
                 } 
-                // Dupla Direita
+                // ==========================  Dupla Direita ========================== 
                 else if (!isFilhoDireito(pai) && isFilhoDireito(atual)) {
                     Parente parente = simplesEsquerda(atual);
 
@@ -140,6 +175,11 @@ public class ArvoreRubroNegro {
 
 
     }
+    
+    private void balancearArvoreRemocao(No atual) {
+
+    }
+    
     private Parente simplesEsquerda(No pai) {
         Parente parentes = new Parente();
         No avo = pai.getPai();
@@ -196,8 +236,7 @@ public class ArvoreRubroNegro {
 
         avo.setFilhoEsquerdo(filhoDireito);
 
-        System.out.println("NO MUDADO PAI");
-        imprimirNo(pai);
+
 
         parentes.setPai(pai);
         parentes.setAvo(avo);
@@ -209,21 +248,6 @@ public class ArvoreRubroNegro {
 
     private Parente pegarParentes(No pai) {
         Parente parentes = new Parente();
-        // if (pai == raiz) {
-        //     return parentes;
-        // } else {
-        //     No avo = pai.getPai();
-        //     No tio;
-        //     if (avo.getFilhoDireito() == pai) {
-        //         tio = avo.getFilhoEsquerdo();
-        //     } else {
-        //         tio = avo.getFilhoDireito();
-        //     }
-
-        //     parentes.setAvo(avo);
-        //     parentes.setTio(tio);
-        //     return parentes;
-        // }
 
         if (pai == raiz) {
             return parentes;
@@ -288,6 +312,12 @@ public class ArvoreRubroNegro {
 
     private boolean isFilhoDireito(No no) {
         return no.getPai().getFilhoDireito() == no;
+    }
+
+    private No sucessor(No no) {
+        if (no.getFilhoEsquerdo() == null) return no;
+
+        return sucessor(no.getFilhoEsquerdo());
     }
 
 // ========================== METODOS GENERICOS ARVORE BINÁRIA ======================================
@@ -381,8 +411,8 @@ public class ArvoreRubroNegro {
  
     public No buscar(No no, int chave) {
 
-        System.out.println("No que foi passado");
-        imprimirNo(no);
+        //System.out.println("No que foi passado");
+        //imprimirNo(no);
         if (no == null ) return null;
         
 
