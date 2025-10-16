@@ -102,7 +102,7 @@ public class ArvoreRubroNegro {
                     mudarCor(avo, "vermelho");
                 } 
                 // Dupla Esquerda
-                if (isFilhoDireito(pai) && !isFilhoDireito(atual)) {
+                else if (isFilhoDireito(pai) && !isFilhoDireito(atual)) {
                     Parente parente = simplesDireita(atual);
 
                     parente = simplesEsquerda(parente.getPai());
@@ -115,8 +115,8 @@ public class ArvoreRubroNegro {
                     mudarCor(avo, "vermelho");
                 }
                 // Simples Direita
-                if (!isFilhoDireito(pai) && !isFilhoDireito(atual)) {
-                    Parente parente = simplesDireita(pai);
+                else if (!isFilhoDireito(pai) && !isFilhoDireito(atual)) {
+                    Parente parente = simplesDireita(pai);  
 
                     pai = parente.getPai();
                     avo = parente.getAvo();
@@ -125,8 +125,8 @@ public class ArvoreRubroNegro {
                     mudarCor(avo, "vermelho");
                 } 
                 // Dupla Direita
-                if (!isFilhoDireito(pai) && isFilhoDireito(atual)) {
-                    Parente parente = simplesEsquerda(pai);
+                else if (!isFilhoDireito(pai) && isFilhoDireito(atual)) {
+                    Parente parente = simplesEsquerda(atual);
 
                     parente = simplesDireita(parente.getPai());
                     pai = parente.getPai();
@@ -177,7 +177,6 @@ public class ArvoreRubroNegro {
         No avo = pai.getPai();
         No filhoDireito = pai.getFilhoDireito();
 
-        
         No bisavo = avo.getPai();
         if (avo == raiz) {
             raiz = pai;
