@@ -171,6 +171,8 @@ public class ArvoreRubroNegro {
             trocarNos(removido, sucessor);
             mudarCor(sucessor, "preto");
         }
+
+        removeNo(removido);
     }   
     
     private Parente simplesEsquerda(No pai) {
@@ -315,69 +317,94 @@ public class ArvoreRubroNegro {
 
     private void trocarNos(No no1, No no2) {
         No pai1 = no1.getPai();
+        No pai2 = no2.getPai();
+
+        boolean no2IsDireito = isFilhoDireito(no2);
 
         if (no1 == raiz) {
             raiz = no2;
         } else {
-            if (isFilhoDireito(no1)) {
-                pai1.setFilhoDireito(no2);
-            } else {
-                pai1.setFilhoEsquerdo(no2);
+            if (pai1 != null) {
+                if (isFilhoDireito(no1)) {
+                    pai1.setFilhoDireito(no2);
+                } else {
+                    pai1.setFilhoEsquerdo(no2);
+                }
             }
         }
 
-        if (no1.getFilhoDireito() == no2) {
-            System.out.println("Nopeeee");
+        // No 1
+        No filhoDireito1 = no1.getFilhoDireito();
+        No filhoEsquerdo1 = no1.getFilhoEsquerdo();
+
+        // No 2 
+        No filhoDireito2 = no2.getFilhoDireito();
+        No filhoEsquerdo2 = no2.getFilhoEsquerdo();
+
+        no2.setPai(pai1);
+        no2.setFilhoEsquerdo(filhoEsquerdo1);
+
+        no1.setFilhoEsquerdo(filhoEsquerdo2);
+        no1.setFilhoDireito(filhoDireito2);
+
+        if (filhoEsquerdo1 != null) {
+            filhoEsquerdo1.setPai(no2);
+        }
+
+        if (filhoEsquerdo2 != null) {
+            filhoEsquerdo2.setPai(no1);
+        }
+        
+        // o no1 tem como o filho direito o proprio no2
+        if (no1 == pai2) {
+            no1.setPai(no2);
+            no2.setFilhoDireito(no1);   
         } else {
-            // No 1
-            No filhoDireito1 = no1.getFilhoDireito();
-            No filhoEsquerdo1 = no1.getFilhoEsquerdo();
-
-            // No 2
-            No pai2 = no2.getPai();
-            No filhoDireito2 = no2.getFilhoDireito();
-            No filhoEsquerdo2 = no2.getFilhoEsquerdo();
-
-            // Alternando no 2 para ficar no lugar do no1
-
+            
+            if (no2IsDireito) {
+                pai2.setFilhoDireito(no1);
+            } else {
+                pai2.setFilhoEsquerdo(no1);
+            }
+            no1.setFilhoDireito(filhoDireito2);
+            no1.setFilhoEsquerdo(filhoEsquerdo2);
             // Filhos do no 1
             if (filhoDireito1 != null) {
                 filhoDireito1.setPai(no2);
             }
-            if (filhoEsquerdo1 != null) {
-                filhoEsquerdo1.setPai(no2);
-            }
 
-            no2.setPai(pai1);
             no2.setFilhoDireito(filhoDireito1);
-            no2.setFilhoEsquerdo(filhoEsquerdo1);
 
-            // Alternando no 1 para ficar no lugar do no2
-            if (pai2 != null) {
-                if (isFilhoDireito(no2)) {
-                    pai2.setFilhoDireito(no1);
-                } else {
-                    pai2.setFilhoEsquerdo(no1);
-                }
-            }
-
-
+    
             // Filhos do no 2
             if (filhoDireito2 != null) {
                 filhoDireito2.setPai(no1);
             }
-            if (filhoEsquerdo2 != null) {
-                filhoEsquerdo2.setPai(no1);
-            }
-
+            
             no1.setPai(pai2);
-            no1.setFilhoDireito(filhoDireito2);
-            no1.setFilhoEsquerdo(filhoEsquerdo2);
         }
 
         
     }
-// ========================== METODOS GENERICOS ARVORE BINÁRIA ======================================
+
+    private void removeNo(No no) {
+        if (no == raiz) {
+            raiz = null;
+        } else {
+            No pai = no.getPai();
+
+            if (isFilhoDireito(no)) {
+                pai.setFilhoDireito(null);
+            } else {
+                pai.setFilhoEsquerdo(null);
+            }
+
+            no.setPai(null);
+        }
+
+
+    }
+    // ========================== METODOS GENERICOS ARVORE BINÁRIA ======================================
     public boolean isEmpty() {
         return tamanho == 0;
     }
@@ -533,37 +560,37 @@ public class ArvoreRubroNegro {
     System.out.println("=".repeat(60));
 }
 
-private void preencherMatrix(No no, String[][] matrix, int linha, int coluna, int offset) {
-    if (no == null) return;
+    private void preencherMatrix(No no, String[][] matrix, int linha, int coluna, int offset) {
+        if (no == null) return;
 
-    // Cor do nó
-    String cor = no.getCor();
-    String corTexto = cor.equals("vermelho") ? "\u001B[31m" : "\u001B[30m";
-    String reset = "\u001B[0m";
-    
-    // Formatar nó
-    String noStr = String.format("%s%d%s", corTexto, no.getChave(), reset);
-    matrix[linha][coluna] = noStr;
+        // Cor do nó
+        String cor = no.getCor();
+        String corTexto = cor.equals("vermelho") ? "\u001B[31m" : "\u001B[30m";
+        String reset = "\u001B[0m";
+        
+        // Formatar nó
+        String noStr = String.format("%s%d%s", corTexto, no.getChave(), reset);
+        matrix[linha][coluna] = noStr;
 
-    // Conectores para filhos
-    if (hasLeft(no)) {
-        matrix[linha + 1][coluna - offset / 2] = "/";
-        preencherMatrix(no.getFilhoEsquerdo(), matrix, linha + 2, coluna - offset, offset / 2);
+        // Conectores para filhos
+        if (hasLeft(no)) {
+            matrix[linha + 1][coluna - offset / 2] = "/";
+            preencherMatrix(no.getFilhoEsquerdo(), matrix, linha + 2, coluna - offset, offset / 2);
+        }
+
+        if (hasRight(no)) {
+            matrix[linha + 1][coluna + offset / 2] = "\\";
+            preencherMatrix(no.getFilhoDireito(), matrix, linha + 2, coluna + offset, offset / 2);
+        }
     }
 
-    if (hasRight(no)) {
-        matrix[linha + 1][coluna + offset / 2] = "\\";
-        preencherMatrix(no.getFilhoDireito(), matrix, linha + 2, coluna + offset, offset / 2);
+    private int calcularAlturaNegra(No no) {
+        if (no == null) return 0;
+        int alturaEsq = calcularAlturaNegra(no.getFilhoEsquerdo());
+        int alturaDir = calcularAlturaNegra(no.getFilhoDireito());
+        int incremento = no.getCor().equals("preto") ? 1 : 0;
+        return Math.max(alturaEsq, alturaDir) + incremento;
     }
-}
-
-private int calcularAlturaNegra(No no) {
-    if (no == null) return 0;
-    int alturaEsq = calcularAlturaNegra(no.getFilhoEsquerdo());
-    int alturaDir = calcularAlturaNegra(no.getFilhoDireito());
-    int incremento = no.getCor().equals("preto") ? 1 : 0;
-    return Math.max(alturaEsq, alturaDir) + incremento;
-}
 
 // ========================== FIM -> METODOS GENERICOS ARVORE BINÁRIA ======================================
 }
