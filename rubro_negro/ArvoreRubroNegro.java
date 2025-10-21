@@ -10,16 +10,14 @@ public class ArvoreRubroNegro {
         this.tamanho = 0;
     }
 
-
     public void inserir(int chave) {
 
         if (isEmpty()) {
             No novo_no = new No(null, chave);
             raiz = novo_no;
-            mudarCor(novo_no,"preto");
+            mudarCor(novo_no, "preto");
             tamanho++;
-        }
-        else {
+        } else {
             No pai = buscar(raiz, chave);
             if (pai.getChave() == chave) {
                 System.out.println("Não é permito adicionar dois valores iguais");
@@ -39,9 +37,9 @@ public class ArvoreRubroNegro {
                 balancearArvore(novo_no);
 
             }
-            
+
         }
-        
+
     }
 
     public void remover(int chave) {
@@ -50,18 +48,18 @@ public class ArvoreRubroNegro {
         } else {
             No no_removido = buscar(raiz, chave);
             System.out.println("NO ACHADO REMOÇÃO");
-                imprimirNo(no_removido);
+            imprimirNo(no_removido);
 
             if (no_removido.getChave() != chave) {
                 System.out.println("No não existente");
             } else {
                 No no_sucessor;
-                
-                if (no_removido.getFilhoDireito() != null){
+
+                if (no_removido.getFilhoDireito() != null) {
                     no_sucessor = sucessor(no_removido.getFilhoDireito());
-                    balancearArvoreRemocao(no_removido, no_sucessor);
                 }
-              
+                no_sucessor = no_removido;
+                balancearArvoreRemocao(no_removido, no_sucessor);
             }
         }
     }
@@ -70,7 +68,7 @@ public class ArvoreRubroNegro {
 
         // imprimirNo(atual);
         No pai = atual.getPai();
-        
+
         if (pai == null || cor(pai) == "preto") {
             System.out.println("\n\nSAINDOOOO\n\n");
             return;
@@ -83,88 +81,85 @@ public class ArvoreRubroNegro {
         No sobrinhoPerto = parentes.getSobrinhoPerto();
         No sobrinhoLonge = parentes.getSobrinhoLonge();
 
-// ========================== CASO 2 ======================================
-        if (
-            cor(pai) == "vermelho" &&
-            cor(tio) == "vermelho" &&
-            cor(avo) == "preto" ) {
+        // ========================== CASO 2 ======================================
+        if (cor(pai) == "vermelho" &&
+                cor(tio) == "vermelho" &&
+                cor(avo) == "preto") {
             System.out.println("Cheguei -----> ANTES");
             print();
-            //imprimirNo(avo);
-            //imprimirNo(pai);
-            //imprimirNo(tio);
+            // imprimirNo(avo);
+            // imprimirNo(pai);
+            // imprimirNo(tio);
             mudarCor(pai, "preto");
             mudarCor(tio, "preto");
             mudarCor(avo, "vermelho");
             System.out.println("Cheguei -----> DEPOIS");
 
-            //imprimirNo(avo);
-            //imprimirNo(pai);
-            //imprimirNo(tio);
+            // imprimirNo(avo);
+            // imprimirNo(pai);
+            // imprimirNo(tio);
 
             balancearArvore(avo);
         }
-// ========================== CASO 3 ======================================
-        if (
-            cor(pai) == "vermelho" &&
-            cor(tio) == "preto" && 
-            cor(avo) == "preto" ) {
+        // ========================== CASO 3 ======================================
+        if (cor(pai) == "vermelho" &&
+                cor(tio) == "preto" &&
+                cor(avo) == "preto") {
 
-                print();
-                // ==========================  simples Esquerda ========================== 
-                if (isFilhoDireito(pai) && isFilhoDireito(atual)) {
-                    Parente parente = simplesEsquerda(pai);
-                    pai = parente.getPai();
-                    avo = parente.getAvo();
+            print();
+            // ========================== simples Esquerda ==========================
+            if (isFilhoDireito(pai) && isFilhoDireito(atual)) {
+                Parente parente = simplesEsquerda(pai);
+                pai = parente.getPai();
+                avo = parente.getAvo();
 
-                    // mudar a cor
-                    mudarCor(pai, "preto");
-                    mudarCor(avo, "vermelho");
-                } 
-                // ==========================  Dupla Esquerda ========================== 
-                else if (isFilhoDireito(pai) && !isFilhoDireito(atual)) {
-                    Parente parente = simplesDireita(atual);
+                // mudar a cor
+                mudarCor(pai, "preto");
+                mudarCor(avo, "vermelho");
+            }
+            // ========================== Dupla Esquerda ==========================
+            else if (isFilhoDireito(pai) && !isFilhoDireito(atual)) {
+                Parente parente = simplesDireita(atual);
 
-                    parente = simplesEsquerda(parente.getPai());
+                parente = simplesEsquerda(parente.getPai());
 
-                    pai = parente.getPai();
-                    avo = parente.getAvo();
+                pai = parente.getPai();
+                avo = parente.getAvo();
 
-                    // mudar a cor
-                    mudarCor(pai, "preto");
-                    mudarCor(avo, "vermelho");
-                }
-                // ==========================  Simples Direita ========================== 
-                else if (!isFilhoDireito(pai) && !isFilhoDireito(atual)) {
-                    Parente parente = simplesDireita(pai);  
+                // mudar a cor
+                mudarCor(pai, "preto");
+                mudarCor(avo, "vermelho");
+            }
+            // ========================== Simples Direita ==========================
+            else if (!isFilhoDireito(pai) && !isFilhoDireito(atual)) {
+                Parente parente = simplesDireita(pai);
 
-                    pai = parente.getPai();
-                    avo = parente.getAvo();
-                    // mudar a cor
-                    mudarCor(pai, "preto");
-                    mudarCor(avo, "vermelho");
-                } 
-                // ==========================  Dupla Direita ========================== 
-                else if (!isFilhoDireito(pai) && isFilhoDireito(atual)) {
-                    Parente parente = simplesEsquerda(atual);
+                pai = parente.getPai();
+                avo = parente.getAvo();
+                // mudar a cor
+                mudarCor(pai, "preto");
+                mudarCor(avo, "vermelho");
+            }
+            // ========================== Dupla Direita ==========================
+            else if (!isFilhoDireito(pai) && isFilhoDireito(atual)) {
+                Parente parente = simplesEsquerda(atual);
 
-                    parente = simplesDireita(parente.getPai());
-                    pai = parente.getPai();
-                    avo = parente.getAvo();
-                    // mudar a cor
-                    mudarCor(pai, "preto");
-                    mudarCor(avo, "vermelho");
-                }
-                
+                parente = simplesDireita(parente.getPai());
+                pai = parente.getPai();
+                avo = parente.getAvo();
+                // mudar a cor
+                mudarCor(pai, "preto");
+                mudarCor(avo, "vermelho");
             }
 
+        }
 
     }
-    
+
     private void balancearArvoreRemocao(No removido, No sucessor) {
 
         if (cor(removido) == "vermelho" && cor(sucessor) == "vermelho") {
-            trocarNos(removido, sucessor);       
+            trocarNos(removido, sucessor);
         }
 
         if (cor(removido) == "preto" && cor(sucessor) == "vermelho") {
@@ -172,26 +167,96 @@ public class ArvoreRubroNegro {
             mudarCor(sucessor, "preto");
         }
 
+        Parente parentes = pegarParentes(sucessor);
+        No tio = parentes.getTio();
+        No sobrinhoLonge = parentes.getSobrinhoLonge();
+        No sobrinhoPerto = parentes.getSobrinhoPerto();
+        No avo = parentes.getAvo();
+
+        // Caso 1
+        if (cor(tio) == "vermelho") {
+            remocaoCaso1(avo, tio);
+        }
+
+        // Caso 4
+        if (cor(sobrinhoLonge) == "vermelho") {
+            remocaoCaso4(avo, tio, sobrinhoLonge);
+            return;
+        }
+        // Caso 3
+        if (cor(sobrinhoPerto) == "vermelho") {
+            remocaoCaso3(tio, sobrinhoPerto);
+            print();
+            parentes = pegarParentes(sucessor);
+            tio = parentes.getTio();
+            sobrinhoLonge = parentes.getSobrinhoLonge();
+            sobrinhoPerto = parentes.getSobrinhoPerto();
+            avo = parentes.getAvo();
+
+            remocaoCaso4(avo, tio, sobrinhoLonge);
+            return;
+        }
+
+        if (cor(avo) == "vermelho") {
+            mudarCor(avo, "preto");
+            mudarCor(tio, "vermelho");
+        }
+
         removeNo(removido);
-    }   
-    
+    }
+
+    private void remocaoCaso1(No pai, No tio) {
+        if (isFilhoDireito(tio)) {
+            simplesEsquerda(tio);
+        } else {
+            simplesDireita(tio);
+        }
+
+        mudarCor(pai, "vermelho");
+        mudarCor(tio, "preto");
+    }
+
+    private void remocaoCaso4(No pai, No tio, No sobrinhoLonge) {
+        if (isFilhoDireito(tio)) {
+            simplesEsquerda(tio);
+        } else {
+            simplesDireita(tio);
+        }
+
+        tio.setCor(cor(pai));
+        mudarCor(pai, "preto");
+        mudarCor(sobrinhoLonge, "preto");
+
+    }
+
+    private void remocaoCaso3(No tio, No sobrinhoPerto) {
+        if (isFilhoDireito(sobrinhoPerto)) {
+            simplesEsquerda(sobrinhoPerto);
+        } else {
+            simplesDireita(sobrinhoPerto);
+        }
+
+        mudarCor(tio, "vermelho");
+        mudarCor(sobrinhoPerto, "preto");
+    }
+
     private Parente simplesEsquerda(No pai) {
         Parente parentes = new Parente();
         No avo = pai.getPai();
         No filhoEsquerdo = pai.getFilhoEsquerdo();
-        
+
         No bisavo = avo.getPai();
         if (avo == raiz) {
             raiz = pai;
         }
 
         if (bisavo != null) {
-                if (isFilhoDireito(avo)) {
-                    bisavo.setFilhoDireito(pai);
-                } else {
-                    bisavo.setFilhoEsquerdo(pai);
-                }
+            if (isFilhoDireito(avo)) {
+                bisavo.setFilhoDireito(pai);
+            } else {
+                bisavo.setFilhoEsquerdo(pai);
             }
+        }
 
         pai.setPai(bisavo);
 
@@ -200,10 +265,10 @@ public class ArvoreRubroNegro {
         avo.setPai(pai);
 
         avo.setFilhoDireito(filhoEsquerdo);
-        
+
         parentes.setPai(pai);
         parentes.setAvo(avo);
-        
+
         return parentes;
     }
 
@@ -215,7 +280,7 @@ public class ArvoreRubroNegro {
         No bisavo = avo.getPai();
         if (avo == raiz) {
             raiz = pai;
-        } 
+        }
         if (bisavo != null) {
             if (isFilhoDireito(avo)) {
                 bisavo.setFilhoDireito(pai);
@@ -231,14 +296,11 @@ public class ArvoreRubroNegro {
 
         avo.setFilhoEsquerdo(filhoDireito);
 
-
-
         parentes.setPai(pai);
         parentes.setAvo(avo);
-        
+
         return parentes;
-        
-        
+
     }
 
     private Parente pegarParentes(No pai) {
@@ -263,7 +325,7 @@ public class ArvoreRubroNegro {
 
             } else {
                 tio = avo.getFilhoDireito();
-                                if (tio == null) {
+                if (tio == null) {
                     sobrinhoLonge = null;
                     sobrinhoPerto = null;
                 } else {
@@ -281,11 +343,12 @@ public class ArvoreRubroNegro {
             return parentes;
 
         }
-        
+
     }
 
     private void mudarCor(No no, String cor) {
-        if (no == null) return;
+        if (no == null)
+            return;
 
         if (no == raiz) {
             no.setCor("preto");
@@ -300,7 +363,9 @@ public class ArvoreRubroNegro {
         }
         return no.getCor();
     }
-// ========================== METODOS GENERICOS ARVORE BINÁRIA ======================================
+
+    // ========================== METODOS GENERICOS ARVORE BINÁRIA
+    // ======================================
     private No pai(No no) {
         return no.getPai();
     }
@@ -310,7 +375,8 @@ public class ArvoreRubroNegro {
     }
 
     private No sucessor(No no) {
-        if (no.getFilhoEsquerdo() == null) return no;
+        if (no.getFilhoEsquerdo() == null)
+            return no;
 
         return sucessor(no.getFilhoEsquerdo());
     }
@@ -337,7 +403,7 @@ public class ArvoreRubroNegro {
         No filhoDireito1 = no1.getFilhoDireito();
         No filhoEsquerdo1 = no1.getFilhoEsquerdo();
 
-        // No 2 
+        // No 2
         No filhoDireito2 = no2.getFilhoDireito();
         No filhoEsquerdo2 = no2.getFilhoEsquerdo();
 
@@ -354,13 +420,13 @@ public class ArvoreRubroNegro {
         if (filhoEsquerdo2 != null) {
             filhoEsquerdo2.setPai(no1);
         }
-        
+
         // o no1 tem como o filho direito o proprio no2
         if (no1 == pai2) {
             no1.setPai(no2);
-            no2.setFilhoDireito(no1);   
+            no2.setFilhoDireito(no1);
         } else {
-            
+
             if (no2IsDireito) {
                 pai2.setFilhoDireito(no1);
             } else {
@@ -375,16 +441,14 @@ public class ArvoreRubroNegro {
 
             no2.setFilhoDireito(filhoDireito1);
 
-    
             // Filhos do no 2
             if (filhoDireito2 != null) {
                 filhoDireito2.setPai(no1);
             }
-            
+
             no1.setPai(pai2);
         }
 
-        
     }
 
     private void removeNo(No no) {
@@ -402,9 +466,10 @@ public class ArvoreRubroNegro {
             no.setPai(null);
         }
 
-
     }
-    // ========================== METODOS GENERICOS ARVORE BINÁRIA ======================================
+
+    // ========================== METODOS GENERICOS ARVORE BINÁRIA
+    // ======================================
     public boolean isEmpty() {
         return tamanho == 0;
     }
@@ -422,20 +487,24 @@ public class ArvoreRubroNegro {
     }
 
     public int altura(No no) {
-        if (no == null) return -1;
+        if (no == null)
+            return -1;
         int hEsq = altura(no.getFilhoEsquerdo());
         int hDir = altura(no.getFilhoDireito());
         return 1 + Math.max(hEsq, hDir);
     }
 
     public int profundidade(No no) {
-        if (no == raiz) return 0;
-        if (no == null) return -1;
+        if (no == raiz)
+            return 0;
+        if (no == null)
+            return -1;
         return 1 + this.profundidade(no.getPai());
     }
-    
+
     private void inOrderPrint(No no, String[][] matrix, int[] atualColumn) {
-        if (no == null) return;
+        if (no == null)
+            return;
 
         if (hasLeft(no))
             inOrderPrint(no.getFilhoEsquerdo(), matrix, atualColumn);
@@ -446,33 +515,32 @@ public class ArvoreRubroNegro {
         String reset = "\u001B[0m"; // reseta a cor
         matrix[row][column] = String.format("%s%d%s[%s]", corTexto, no.getChave(), reset, no.getCor());
 
-
         if (hasRight(no))
             inOrderPrint(no.getFilhoDireito(), matrix, atualColumn);
     }
 
     // public void print() {
-    //     if (this.isEmpty())
-    //         throw new RuntimeException("A árvore está vazia");
+    // if (this.isEmpty())
+    // throw new RuntimeException("A árvore está vazia");
 
-    //     int rows = this.altura(raiz) + 1;
-    //     int columns = tamanho * 2;
-    //     String[][] matrix = new String[rows][columns];
+    // int rows = this.altura(raiz) + 1;
+    // int columns = tamanho * 2;
+    // String[][] matrix = new String[rows][columns];
 
-    //     for (int i = 0; i < rows; i++)
-    //         for (int j = 0; j < columns; j++)
-    //             matrix[i][j] = " ";
+    // for (int i = 0; i < rows; i++)
+    // for (int j = 0; j < columns; j++)
+    // matrix[i][j] = " ";
 
-    //     int[] atualColumn = {0};
-    //     this.inOrderPrint(this.raiz, matrix, atualColumn);
+    // int[] atualColumn = {0};
+    // this.inOrderPrint(this.raiz, matrix, atualColumn);
 
-    //     for (int i = 0; i < rows; i++) {
-    //         for (int j = 0; j < columns; j++)
-    //             System.out.print(String.format("%-10s", matrix[i][j]));
-    //         System.out.println("\n");
-    //     }
+    // for (int i = 0; i < rows; i++) {
+    // for (int j = 0; j < columns; j++)
+    // System.out.print(String.format("%-10s", matrix[i][j]));
+    // System.out.println("\n");
+    // }
 
-    //     System.out.println("-------------------------------------------------------");
+    // System.out.println("-------------------------------------------------------");
     // }
 
     public void imprimirNo(No no) {
@@ -488,86 +556,86 @@ public class ArvoreRubroNegro {
         System.out.println("==== Nó ====");
         System.out.println("Chave: " + no.getChave() + " | cor: " + cor(no));
         System.out.println("Pai: " + (pai != null ? pai.getChave() + " | cor: " + cor(pai) : "null"));
-        System.out.println("Filho esquerdo: " + (filhoEsq != null ? filhoEsq.getChave() + " | cor: " + cor(filhoEsq) : "null"));
-        System.out.println("Filho direito: " + (filhoDir != null ? filhoDir.getChave() + " | cor: " + cor(filhoDir) : "null"));
-    System.out.println("============");
-}
- 
+        System.out.println(
+                "Filho esquerdo: " + (filhoEsq != null ? filhoEsq.getChave() + " | cor: " + cor(filhoEsq) : "null"));
+        System.out.println(
+                "Filho direito: " + (filhoDir != null ? filhoDir.getChave() + " | cor: " + cor(filhoDir) : "null"));
+        System.out.println("============");
+    }
+
     public No buscar(No no, int chave) {
 
-        //System.out.println("No que foi passado");
-        //imprimirNo(no);
-        if (no == null ) return null;
-        
+        // System.out.println("No que foi passado");
+        // imprimirNo(no);
+        if (no == null)
+            return null;
 
         if (chave == no.getChave()) {
             return no;
         }
 
-        if (
-            (chave < no.getChave() && no.getFilhoEsquerdo() == null) ||
-            (chave > no.getChave() && no.getFilhoDireito() == null)) {
-                return no;
-            }
+        if ((chave < no.getChave() && no.getFilhoEsquerdo() == null) ||
+                (chave > no.getChave() && no.getFilhoDireito() == null)) {
+            return no;
+        }
 
         else if (chave > no.getChave()) {
             System.out.println("Chegeuei");
             return buscar(no.getFilhoDireito(), chave);
         } else {
             return buscar(no.getFilhoEsquerdo(), chave);
-        } 
-        
+        }
 
     }
-
 
     public void print() {
-    if (this.isEmpty()) {
-        System.out.println("Árvore vazia");
-        return;
-    }
-
-    int altura = this.altura(raiz);
-    int largura = (int) Math.pow(2, altura + 1) * 3;
-    String[][] matrix = new String[altura * 2 + 1][largura];
-
-    // Inicializar matriz com espaços
-    for (int i = 0; i < matrix.length; i++) {
-        for (int j = 0; j < matrix[i].length; j++) {
-            matrix[i][j] = " ";
+        if (this.isEmpty()) {
+            System.out.println("Árvore vazia");
+            return;
         }
-    }
 
-    preencherMatrix(raiz, matrix, 0, largura / 2, largura / 4);
+        int altura = this.altura(raiz);
+        int largura = (int) Math.pow(2, altura + 1) * 3;
+        String[][] matrix = new String[altura * 2 + 1][largura];
 
-    // Imprimir matriz
-    System.out.println("\n" + "=".repeat(60));
-    System.out.println("ÁRVORE RUBRO-NEGRO (Altura: " + altura + ", Tamanho: " + tamanho + ")");
-    System.out.println("=".repeat(60));
-    
-    for (int i = 0; i < matrix.length; i++) {
-        StringBuilder linha = new StringBuilder();
-        for (int j = 0; j < matrix[i].length; j++) {
-            linha.append(matrix[i][j]);
+        // Inicializar matriz com espaços
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                matrix[i][j] = " ";
+            }
         }
-        System.out.println(linha.toString().replaceAll("\\s+$", "")); // Remove espaços finais
+
+        preencherMatrix(raiz, matrix, 0, largura / 2, largura / 4);
+
+        // Imprimir matriz
+        System.out.println("\n" + "=".repeat(60));
+        System.out.println("ÁRVORE RUBRO-NEGRO (Altura: " + altura + ", Tamanho: " + tamanho + ")");
+        System.out.println("=".repeat(60));
+
+        for (int i = 0; i < matrix.length; i++) {
+            StringBuilder linha = new StringBuilder();
+            for (int j = 0; j < matrix[i].length; j++) {
+                linha.append(matrix[i][j]);
+            }
+            System.out.println(linha.toString().replaceAll("\\s+$", "")); // Remove espaços finais
+        }
+        System.out.println("=".repeat(60));
+
+        // Estatísticas
+        System.out.println("Raiz: " + raiz.getChave() + "[" + raiz.getCor() + "]");
+        System.out.println("Altura negra: " + calcularAlturaNegra(raiz));
+        System.out.println("=".repeat(60));
     }
-    System.out.println("=".repeat(60));
-    
-    // Estatísticas
-    System.out.println("Raiz: " + raiz.getChave() + "[" + raiz.getCor() + "]");
-    System.out.println("Altura negra: " + calcularAlturaNegra(raiz));
-    System.out.println("=".repeat(60));
-}
 
     private void preencherMatrix(No no, String[][] matrix, int linha, int coluna, int offset) {
-        if (no == null) return;
+        if (no == null)
+            return;
 
         // Cor do nó
         String cor = no.getCor();
         String corTexto = cor.equals("vermelho") ? "\u001B[31m" : "\u001B[30m";
         String reset = "\u001B[0m";
-        
+
         // Formatar nó
         String noStr = String.format("%s%d%s", corTexto, no.getChave(), reset);
         matrix[linha][coluna] = noStr;
@@ -585,12 +653,14 @@ public class ArvoreRubroNegro {
     }
 
     private int calcularAlturaNegra(No no) {
-        if (no == null) return 0;
+        if (no == null)
+            return 0;
         int alturaEsq = calcularAlturaNegra(no.getFilhoEsquerdo());
         int alturaDir = calcularAlturaNegra(no.getFilhoDireito());
         int incremento = no.getCor().equals("preto") ? 1 : 0;
         return Math.max(alturaEsq, alturaDir) + incremento;
     }
 
-// ========================== FIM -> METODOS GENERICOS ARVORE BINÁRIA ======================================
+    // ========================== FIM -> METODOS GENERICOS ARVORE BINÁRIA
+    // ======================================
 }
