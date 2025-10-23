@@ -40,6 +40,13 @@ public class TesteRubroNegro {
                     System.out.println("\n🌳 Estrutura atual da árvore:");
                     arvoreRubroNegro.print();
                 }
+                case 4 -> {
+                    for (int i = 1; i <= 10; i++) {
+                        arvoreRubroNegro.inserir(i);
+                        arvoreRubroNegro.print();
+
+                    }
+                }
 
                 case 0 -> {
                     System.out.println("\nEncerrando o programa...");
