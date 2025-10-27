@@ -23,7 +23,7 @@ public class ArvoreRubroNegro {
                 System.out.println("Não é permito adicionar dois valores iguais");
             } else {
                 tamanho++;
-                System.out.println("BUSCA ---- CHAVE " + chave);
+                // System.out.println("BUSCA ---- CHAVE " + chave);
                 // imprimirNo(pai);
                 No novo_no = new No(pai, chave);
 
@@ -47,12 +47,13 @@ public class ArvoreRubroNegro {
             System.out.println("Não é possivel remover, árvore vazia");
         } else {
             No no_removido = buscar(raiz, chave);
-            System.out.println("NO ACHADO REMOÇÃO");
-            imprimirNo(no_removido);
+            //System.out.println("NO ACHADO REMOÇÃO");
+            //imprimirNo(no_removido);
 
             if (no_removido.getChave() != chave) {
                 System.out.println("No não existente");
             } else {
+                tamanho--;
                 No no_sucessor;
 
                 if (no_removido.getFilhoDireito() != null) {
@@ -61,7 +62,10 @@ public class ArvoreRubroNegro {
                     no_sucessor = no_removido.getFilhoEsquerdo();
                 }
                 else {
-                    
+                    if (no_removido == raiz) {
+                        raiz = null;
+                        return;
+                    }
                     no_sucessor = no_removido;
                 }
                 removerNos(no_removido, no_sucessor);
@@ -75,7 +79,7 @@ public class ArvoreRubroNegro {
         No pai = atual.getPai();
 
         if (pai == null || cor(pai) == "preto") {
-            System.out.println("\n\nSAINDOOOO\n\n");
+           // System.out.println("\n\nSAINDOOOO\n\n");
             return;
         }
 
@@ -90,15 +94,15 @@ public class ArvoreRubroNegro {
         if (cor(pai) == "vermelho" &&
                 cor(tio) == "vermelho" &&
                 cor(avo) == "preto") {
-            System.out.println("Cheguei -----> ANTES");
-            print();
+           // System.out.println("Cheguei -----> ANTES");
+            //print();
             // imprimirNo(avo);
             // imprimirNo(pai);
             // imprimirNo(tio);
             mudarCor(pai, "preto");
             mudarCor(tio, "preto");
             mudarCor(avo, "vermelho");
-            System.out.println("Cheguei -----> DEPOIS");
+            //System.out.println("Cheguei -----> DEPOIS");
 
             // imprimirNo(avo);
             // imprimirNo(pai);
@@ -111,7 +115,7 @@ public class ArvoreRubroNegro {
                 cor(tio) == "preto" &&
                 cor(avo) == "preto") {
 
-            print();
+            //print();
             // ========================== simples Esquerda ==========================
             if (isFilhoDireito(pai) && isFilhoDireito(atual)) {
                 Parente parente = simplesEsquerda(pai);
@@ -162,9 +166,9 @@ public class ArvoreRubroNegro {
     }
 
     private void removerNos(No removido, No sucessor) {
-        System.out.println("Removido");
-        imprimirNo(removido);
-        System.out.println("Sucessor");
+       // System.out.println("Removido");
+        ///imprimirNo(removido);
+       // System.out.println("Sucessor");
         imprimirNo(sucessor);
         if (cor(removido) == "vermelho" && cor(sucessor) == "vermelho") {
             trocarNos(removido, sucessor);
@@ -179,14 +183,14 @@ public class ArvoreRubroNegro {
             return;
         }
 
-        No aux = sucessor;
-        System.out.println("Removido");
-        imprimirNo(removido);
-        System.out.println("Sucessor");
-        imprimirNo(sucessor);
+        
+        //System.out.println("Removido");
+        //imprimirNo(removido);
+        //System.out.println("Sucessor");
+       // imprimirNo(sucessor);
         balancearArvoreRemocao(sucessor);
         trocarNos(removido, sucessor);
-        print();
+        //print();
         removeNo(removido);
     }
 
@@ -202,19 +206,19 @@ public class ArvoreRubroNegro {
         No sobrinhoPerto = parentes.getSobrinhoPerto();
         No avo = parentes.getAvo();
 
-        System.out.println("=============================");
-        System.out.println("============ Avo ============");
-        imprimirNo(avo);
-        System.out.println("============ Sucessor ============");
-        imprimirNo(sucessor);
-        System.out.println("============ Irmao ============");
-        imprimirNo(tio);
-        System.out.println("============ Sobrinho Perto ============");
-        imprimirNo(sobrinhoPerto);
-        System.out.println("============ Sobrinho Longe ============");
-        imprimirNo(sobrinhoLonge);
-        
-        System.out.println("=============================");
+       // System.out.println("=============================");
+       // System.out.println("============ Avo ============");
+       // imprimirNo(avo);
+       // System.out.println("============ Sucessor ============");
+      //  imprimirNo(sucessor);
+       // System.out.println("============ Irmao ============");
+      //  imprimirNo(tio);
+      //  System.out.println("============ Sobrinho Perto ============");
+      //  imprimirNo(sobrinhoPerto);
+      //  System.out.println("============ Sobrinho Longe ============");
+      //  imprimirNo(sobrinhoLonge);
+       // 
+     //   System.out.println("=============================");
 
         // Caso 1
         if (cor(tio) == "vermelho") {
@@ -229,7 +233,7 @@ public class ArvoreRubroNegro {
         // Caso 3
         if (cor(sobrinhoPerto) == "vermelho") {
             remocaoCaso3(tio, sobrinhoPerto);
-            print();
+            //print();
             parentes = pegarParentes(sucessor);
             tio = parentes.getTio();
             sobrinhoLonge = parentes.getSobrinhoLonge();
@@ -433,6 +437,7 @@ public class ArvoreRubroNegro {
     }
 
     private void trocarNos(No no1, No no2) {
+
         No paiNo1 = no1.getPai();
         No paiNo2 = no2.getPai();
 
@@ -447,6 +452,7 @@ public class ArvoreRubroNegro {
                 }
             }
         }
+        boolean no2FilhoDireito = isFilhoDireito(no2);
         no2.setPai(paiNo1);
 
         boolean no2FilhoDireitoNo1 = no2 == no1.getFilhoDireito();
@@ -501,7 +507,7 @@ public class ArvoreRubroNegro {
         else {
             // Atualiza pai do no2
             if (paiNo2 != null) {
-                if (isFilhoDireito(no2)) {
+                if (no2FilhoDireito) {
                     paiNo2.setFilhoDireito(no1);
                 } else {
                     paiNo2.setFilhoEsquerdo(no1);
@@ -666,7 +672,7 @@ public class ArvoreRubroNegro {
         }
 
         else if (chave > no.getChave()) {
-            System.out.println("Chegeuei");
+           // System.out.println("Chegeuei");
             return buscar(no.getFilhoDireito(), chave);
         } else {
             return buscar(no.getFilhoEsquerdo(), chave);

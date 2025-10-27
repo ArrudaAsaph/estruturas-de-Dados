@@ -14,6 +14,7 @@ public class TesteRubroNegro {
             System.out.println("1 - Inserir valor");
             System.out.println("2 - Remover valor");
             System.out.println("3 - Exibir árvore");
+            System.out.println("4 - inserir 1 a 10");
             System.out.println("0 - Sair");
             System.out.print("Opção: ");
 
