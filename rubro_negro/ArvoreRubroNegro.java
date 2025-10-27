@@ -186,12 +186,15 @@ public class ArvoreRubroNegro {
         imprimirNo(sucessor);
         balancearArvoreRemocao(sucessor);
         trocarNos(removido, sucessor);
+        print();
         removeNo(removido);
     }
 
     private void balancearArvoreRemocao(No sucessor) {
 
-        
+        if (sucessor == raiz) {
+            return;
+        }
 
         Parente parentes = pegarParentes(sucessor);
         No tio = parentes.getTio();
@@ -430,91 +433,120 @@ public class ArvoreRubroNegro {
     }
 
     private void trocarNos(No no1, No no2) {
-
-        // int elemento = no1.getChave();
-        // no1.setChave(no2.getChave());
-        // no2.setChave(elemento);
-
-        
-        No pai1 = no1.getPai();
-        No pai2 = no2.getPai();
-
-        boolean no2IsDireito = isFilhoDireito(no2);
+        No paiNo1 = no1.getPai();
+        No paiNo2 = no2.getPai();
 
         if (no1 == raiz) {
             raiz = no2;
         } else {
-            if (pai1 != null) {
+            if (paiNo1 != null) {
                 if (isFilhoDireito(no1)) {
-                    pai1.setFilhoDireito(no2);
+                    paiNo1.setFilhoDireito(no2);
                 } else {
-                    pai1.setFilhoEsquerdo(no2);
+                    paiNo1.setFilhoEsquerdo(no2);
                 }
             }
         }
+        no2.setPai(paiNo1);
 
-        // No 1
-        No filhoDireito1 = no1.getFilhoDireito();
-        No filhoEsquerdo1 = no1.getFilhoEsquerdo();
+        boolean no2FilhoDireitoNo1 = no2 == no1.getFilhoDireito();
+        boolean no2FilhoEsquerdoNo1 = no2 == no1.getFilhoEsquerdo();
 
-        // No 2
-        No filhoDireito2 = no2.getFilhoDireito();
-        No filhoEsquerdo2 = no2.getFilhoEsquerdo();
+        No filhoDireitoNo1 = no1.getFilhoDireito();
+        No filhoEsquerdoNo1 = no1.getFilhoEsquerdo();
+        No filhoDireitoNo2 = no2.getFilhoDireito();
+        No filhoEsquerdoNo2 = no2.getFilhoEsquerdo();
 
-        no2.setPai(pai1);
-        no2.setFilhoEsquerdo(filhoEsquerdo1);
-
-        no1.setFilhoEsquerdo(filhoEsquerdo2);
-        no1.setFilhoDireito(filhoDireito2);
-
-        if (filhoEsquerdo1 != null) {
-            filhoEsquerdo1.setPai(no2);
-        }
-
-        if (filhoEsquerdo2 != null) {
-            filhoEsquerdo2.setPai(no1);
-        }
-
-        // o no1 tem como o filho direito o proprio no2
-        if (no1 == pai2) {
-            no1.setPai(no2);
+        // No2 é o filho direito do no1
+        if (no2FilhoDireitoNo1) {
             no2.setFilhoDireito(no1);
-        } else {
-
-            if (no2IsDireito) {
-                pai2.setFilhoDireito(no1);
-            } else {
-                pai2.setFilhoEsquerdo(no1);
+            no2.setFilhoEsquerdo(filhoEsquerdoNo1);
+            
+            if (filhoEsquerdoNo1 != null) {
+                filhoEsquerdoNo1.setPai(no2);
             }
-            no1.setFilhoDireito(filhoDireito2);
-            no1.setFilhoEsquerdo(filhoEsquerdo2);
-            // Filhos do no 1
-            if (filhoDireito1 != null) {
-                filhoDireito1.setPai(no2);
+            
+            no1.setPai(no2);
+            no1.setFilhoDireito(filhoDireitoNo2);
+            no1.setFilhoEsquerdo(filhoEsquerdoNo2);
+            
+            if (filhoDireitoNo2 != null) {
+                filhoDireitoNo2.setPai(no1);
+            }
+            if (filhoEsquerdoNo2 != null) {
+                filhoEsquerdoNo2.setPai(no1);
+            }
+        } 
+        // No2 é o filho esquerdo do no1
+        else if (no2FilhoEsquerdoNo1) {
+            no2.setFilhoEsquerdo(no1);
+            no2.setFilhoDireito(filhoDireitoNo1);
+            
+            if (filhoDireitoNo1 != null) {
+                filhoDireitoNo1.setPai(no2);
+            }
+            
+            no1.setPai(no2);
+            no1.setFilhoDireito(filhoDireitoNo2);
+            no1.setFilhoEsquerdo(filhoEsquerdoNo2);
+            
+            if (filhoDireitoNo2 != null) {
+                filhoDireitoNo2.setPai(no1);
+            }
+            if (filhoEsquerdoNo2 != null) {
+                filhoEsquerdoNo2.setPai(no1);
+            }
+        } 
+
+        else {
+            // Atualiza pai do no2
+            if (paiNo2 != null) {
+                if (isFilhoDireito(no2)) {
+                    paiNo2.setFilhoDireito(no1);
+                } else {
+                    paiNo2.setFilhoEsquerdo(no1);
+                }
+            }
+            no1.setPai(paiNo2);
+
+    
+            no1.setFilhoEsquerdo(filhoEsquerdoNo2);
+            no1.setFilhoDireito(filhoDireitoNo2);
+            
+            if (filhoEsquerdoNo2 != null) {
+                filhoEsquerdoNo2.setPai(no1);
+            }
+            if (filhoDireitoNo2 != null) {
+                filhoDireitoNo2.setPai(no1);
             }
 
-            no2.setFilhoDireito(filhoDireito1);
-
-            // Filhos do no 2
-            if (filhoDireito2 != null) {
-                filhoDireito2.setPai(no1);
+    
+            no2.setFilhoEsquerdo(filhoEsquerdoNo1);
+            no2.setFilhoDireito(filhoDireitoNo1);
+            
+            if (filhoEsquerdoNo1 != null) {
+                filhoEsquerdoNo1.setPai(no2);
             }
-
-            no1.setPai(pai2);
+            if (filhoDireitoNo1 != null) {
+                filhoDireitoNo1.setPai(no2);
+            }
         }
-
     }
-
+    
     private void removeNo(No no) {
         if (no == raiz) {
             raiz = null;
         } else {
             No pai = no.getPai();
-
+            No filho = no.getFilhoDireito();
             if (isFilhoDireito(no)) {
-                pai.setFilhoDireito(null);
+                pai.setFilhoDireito(filho);
             } else {
-                pai.setFilhoEsquerdo(null);
+                pai.setFilhoEsquerdo(filho);
+            }
+
+            if (filho != null) {
+                filho.setPai(pai);
             }
 
             no.setPai(null);
